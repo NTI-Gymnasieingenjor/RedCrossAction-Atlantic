@@ -1,0 +1,48 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+.info-with-icon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.info-with-icon .material-icons {
+        margin-right: 5px;
+}
+
+#googleMaps {
+    width: 100%;
+    border: 0px;
+}
+
+/* label color */
+.invert-input .input-field label {
+    color: #FFF;
+}
+
+.invert-input .input-field label[for="textarea1"].active {
+    color: #FFF;
+}
+
+.invert-input textarea.materialize-textarea:focus:not([readonly]) + label {
+    color: #FFF;
+}
+
+#textarea1 {
+    color: #FFF;
+    border-bottom: 1px solid #FFF;
+    box-shadow: none;
+}
