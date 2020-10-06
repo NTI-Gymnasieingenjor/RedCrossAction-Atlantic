@@ -79,7 +79,6 @@ app.get("/volunteer/:id/no", (req, res) => {
     res.render("pages/volunteer_no");
     usersAnswered.push(req.params.id);
 });
-
 app.listen(port, () => {
     return console.log(`server is listening on ${port}`);
 });
