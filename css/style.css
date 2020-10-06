@@ -29,15 +29,15 @@
 }
 
 /* label color */
-.input-field label {
+.invert-input .input-field label {
     color: #FFF;
 }
 
-.input-field label[for="textarea1"].active {
+.invert-input .input-field label[for="textarea1"].active {
     color: #FFF;
 }
 
-textarea.materialize-textarea:focus:not([readonly]) + label {
+.invert-input textarea.materialize-textarea:focus:not([readonly]) + label {
     color: #FFF;
 }
 
