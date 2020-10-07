@@ -96,8 +96,25 @@ $(document).ready(() => {
     $('select').formSelect();
 });
 
+function clearAllFields() {
+    $("#crisis-mailing-form :input").each(function(){
+        $(this).val("");
+    });
+    $("#crisis-mailing-form textarea").val("");
+}
+
+function handleCrisisInfoMsgChange() {
+    let crisisInfoMsg = $("#textarea2").val();
+    
+    if(crisisInfoMsg.length)
+        $("#sms-draft").html('<div class="card-panel white"><h5>SMS Utkast</h5><p>Hej John Doe! <span id="crisis-info-msg" class="red-text">'+crisisInfoMsg+'</span> Har du möjlighet att delta som volontär? Klicka här för mer information: https://rodakorset.se/randomtext</p></div>');
+    else
+        $("#sms-draft").html("");
+}
+
 function handleCrisisMailing(e){
     e.preventDefault();
+
     let crisisName = $("#notification-name").val()
     let volonteersNeeded = parseInt($("#volonteers-needed").val());
     $("#kris-data").append('<div class="card-panel white"><h6>' + crisisName + '</h6></div>')
@@ -131,6 +148,10 @@ function handleCrisisMailing(e){
         }
     });
 
+
+    clearAllFields();
+    handleCrisisInfoMsgChange();
+    
     // Simulates fake data.
     let tid = window.setInterval(() => {
         if(chart.data.datasets[0].data[2] == 0){
@@ -147,7 +168,18 @@ function handleCrisisMailing(e){
             updateChartData(chart, 1, 1)
             updateChartData(chart, 2, -1)
         }
-    }, 7000); 
+    }, 7000);
+
+    // Simulates fake info/tip from volunteer.
+    let listOfMessages = ["Zombies är arga :(", "Jag blev biten vad ska jag göra?", "Min granne beter sig skumt :((", "Min katt blev tagen, kommer den bli en zombie?", "Vad gör jag om jag blivit biten?", "GIMME BRAAAAINNNN!!!!", "..........................."];
+    let messageInterval = window.setInterval(() => {
+        if(listOfMessages.length){
+            let msg = listOfMessages.shift();
+            $("#info-tip-list").append('<div class="card-panel teal"><span class="white-text">' + msg + '</span></div>');
+        } else {
+            clearInterval(messageInterval);
+        }
+    }, 10000)
 }
 
 function updateChartData(chart, dataIndex, amount){

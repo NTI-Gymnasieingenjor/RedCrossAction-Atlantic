@@ -27,7 +27,7 @@
                 <div class="col s12 l6">
                     <div class="card-panel white">
                         <h4>Kris massutskick</h4>
-                        <form onsubmit="handleCrisisMailing(event)">
+                        <form id="crisis-mailing-form" onsubmit="handleCrisisMailing(event)">
                             <div class="row">
                                 <div class="input-field col s12 m10">
                                     <input id="notification-name" type="text" placeholder="Krisnamn" class="validate">
@@ -67,14 +67,12 @@
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
-                                    <textarea id="textarea2" class="materialize-textarea"></textarea>
-                                    <label for="textarea2">Meddelande</label>
+                                    <textarea oninput="handleCrisisInfoMsgChange()" id="textarea2" class="materialize-textarea"></textarea>
+                                    <label for="textarea2">Info kring kris</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
-                                    <div id="contenta">
-                                    </div>
                                     <select multiple>
                                         <option value="" disabled selected>Välj alternativ</option>
                                     </select>
@@ -92,18 +90,22 @@
                 </div>
                 <div id="kris-data" class="col s12 l6">
                 </div>
+                <div id="sms-draft" class="col s12 l6">
+                </div>
                 <div class="col s12 l6">
                     <div class="card-panel white">
                         <h5>Tips/Info från volontärer</h5>
-                        <div class="card-panel teal">
-                            <span class="white-text">
-                                Det behövs mer info kring tidpunkt.
-                            </span>
-                        </div>
-                        <div class="card-panel teal">
-                            <span class="white-text">
-                                Krävs mer ansiktmasker i norra tältet.
-                            </span>
+                        <div id="info-tip-list">
+                            <div class="card-panel teal">
+                                <span class="white-text">
+                                    Det behövs mer info kring tidpunkt.
+                                </span>
+                            </div>
+                            <div class="card-panel teal">
+                                <span class="white-text">
+                                    Krävs mer ansiktmasker i norra tältet.
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
