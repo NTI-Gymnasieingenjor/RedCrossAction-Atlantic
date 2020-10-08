@@ -11,7 +11,7 @@ const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READONLY, err => {
         console.error(err);
 });
 
-app.set("view engine", "ejs");
+app.set("view engine", "pug");
 app.use(express.static('public'))
 
 app.use(session({
@@ -22,14 +22,18 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
+app.use(function(req, res, next) {
     let isLoggedIn = req.session.role == "jour";
-    res.render("pages/home", {data: {isLoggedIn: isLoggedIn}}); 
+    res.locals.isLoggedIn = isLoggedIn;
+    next();
+});
+
+app.get("/", (req, res) => {
+    res.render("pages/home");
 });
 
 app.get("/login", (req, res) => {
-    let isLoggedIn = req.session.role == "jour";
-    res.render("pages/login", {data: {isLoggedIn: isLoggedIn}});
+    res.render("pages/login");
 });
 
 app.get("/logout", (req, res) => {
@@ -63,8 +67,8 @@ app.post("/auth", (req, res) => {
 });
 
 app.get("/dashboard", (req, res) => {
-    if(req.session.role === "jour"){
-        res.render("pages/dashboard", {data: {isLoggedIn: true}});
+    if(res.locals.isLoggedIn){
+        res.render("pages/dashboard");
     } else {
         res.redirect("/");
     }
