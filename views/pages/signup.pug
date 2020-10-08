@@ -2,18 +2,22 @@ extends ../layout.pug
 
 block content
     .row
-        form.col.s12
+        form(action="/" method="GET").col.s12
             h2 Registera dig som volontär
             .row
                 .input-field.col.s12.m6
-                    input(placeholder="T.ex. Kalle" type="text")#first_name.validate
+                    input(placeholder="T.ex. Kalle" type="text" name="firstname")#first_name.validate
                     label(for="first_name") Förnamn
             .row
                 .input-field.col.s12.m6
-                    input(placeholder="T.ex. 0746497289" type="tel")#phonenumber.validate
+                    input(placeholder="T.ex. 0746497289" type="tel" name="phonenumber")#phonenumber.validate
                     label(for="phonenumber") Mobilnummer
             .row
                 .input-field.col.s12.m6
-                    select(multiple)
+                    select(multiple name="area")
                         option(value="" disabled) Välj områden
                         label Ta emot SMS som skickas till:
+            .row
+                .input-field.col.s12.m10
+                    button(type="submit").btn.red.white-text.waves-effect.waves-light Registrera
+                        i.material-icons.right send
