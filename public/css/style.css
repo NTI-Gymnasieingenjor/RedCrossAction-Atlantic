@@ -61,3 +61,6 @@
     float: right;
     font-size: 0.9em;
 }
+#sms-draft {
+	line-break: anywhere;
+}
