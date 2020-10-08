@@ -46,3 +46,12 @@
     border-bottom: 1px solid #FFF;
     box-shadow: none;
 }
+
+.navbar {
+    background-color: #FFF;
+    box-shadow: none;
+}
+
+.navbar .sidenav-trigger {
+    color: red;
+}
