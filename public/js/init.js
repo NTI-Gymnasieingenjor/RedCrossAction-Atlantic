@@ -201,6 +201,14 @@ function handleCrisisMailing(e){
     }, 10000)
 }
 
+function handleMoreInfoToggle(e) {
+    if (e.target.checked) {
+        $("#more-info-field").append('<textarea class="materialize-textarea" placeholder="Mer info angående krisen" id="textarea3"></textarea></div>')
+    } else {
+        $("#more-info-field").html("");
+    }
+}
+
 function updateChartData(chart, dataIndex, amount){
     chart.data.datasets[0].data[dataIndex] += amount;
     chart.update();

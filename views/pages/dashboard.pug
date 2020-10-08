@@ -46,6 +46,15 @@ block content
                             label Områden för massutskick
                     .row
                         .input-field.col.s12.m10
+                            p
+                                label
+                                    input(type="checkbox" onchange="handleMoreInfoToggle(event)")
+                                    span Vill du lägga till mer info?
+                    .row
+                        #more-info-field.input-field.col.s12.m10 
+
+                    .row
+                        .input-field.col.s12.m10
                             button(type="submit").btn.red.white-text.waves-effect.waves-light Skicka
                                 i.material-icons.right send
         #kris-data.col.s12.l6
