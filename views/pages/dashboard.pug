@@ -17,7 +17,7 @@ block content
                     .row
                         .input-field.col.s12.m10
                             input(type="text" placeholder="T.ex. Regnkläder och handskar")#clothing-gear-needed.validate
-                            label(for="clothing-gear-needed") Kläder/utrustning
+                            label(for="clothing-gear-needed") Kläder/utrustning för volontärer att ta med
                     .row
                         .input-field.col.s12.m10
                             input(type="text" placeholder="T.ex. Mora, Morastrand")#samlingsplats.validate
@@ -28,16 +28,16 @@ block content
                             label(for="datum") Mötesdatum
                     .row
                         .input-field.col.s12.m10
-                            input(type="text" placeholder="15:00")#tidpunkt.validate
+                            input(type="text" placeholder="T.ex. 15:00")#tidpunkt.validate
                             label(for="tidpunkt") Mötestid
                     .row
                         .input-field.col.s12.m10
-                            p.grey-text Separera de olika uppgifterna med komman.
-                            input(type="text" placeholder="T.ex. Städning, Dela ut at, bädda sängar")#help_tasks.validate
+                            p.grey-text Separera de olika uppgifterna med kommatecken.
+                            input(type="text" placeholder="T.ex. Städning, Dela ut mat, Bädda sängar")#help_tasks.validate
                             label(for="help_tasks") Hjälp som behövs
                     .row
                         .input-field.col.s12.m10
-                            textarea(type="text" placeholder="T.ex. Brändder härjar i stora delar av Dalarna" oninput="handleCrisisInfoMsgChange()")#textarea2.materialize-textarea
+                            textarea(type="text" placeholder="T.ex. Bränder härjar i stora delar av Dalarna" oninput="handleCrisisInfoMsgChange()")#textarea2.materialize-textarea
                             label(for="textarea2") Kort information om kris för SMS
                     .row
                         .input-field.col.s12.m10
