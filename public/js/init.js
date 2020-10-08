@@ -116,7 +116,7 @@ function handleCrisisMailing(e){
     e.preventDefault();
 
     let crisisName = $("#notification-name").val()
-    let volonteersNeeded = parseInt($("#volonteers-needed").val());
+    let volunteersNeeded = parseInt($("#volunteers-needed").val());
     $("#kris-data").append('<div class="card-panel white"><h6>' + crisisName + '</h6></div>')
     $("#kris-data > .card-panel").append("<canvas id=\"myChart\"></canvas>");
     
@@ -132,7 +132,7 @@ function handleCrisisMailing(e){
                     "#f44336",
                     "#bdbdbd"
                 ],
-                data: [0, 0, volonteersNeeded]
+                data: [0, 0, volunteersNeeded]
             }]
         },
 
@@ -141,7 +141,7 @@ function handleCrisisMailing(e){
                 yAxes: [{
                     ticks: {
                         suggestedMin: 0,
-                        suggestedMax: volonteersNeeded
+                        suggestedMax: volunteersNeeded
                     }
                 }]
             }

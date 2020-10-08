@@ -1,0 +1,17 @@
+extends ../layout.pug
+block content
+    .row
+        form.col.s12
+            h2 Registera dig som volontär
+            .row
+                .input-field.col.s12.m6
+                    input(placeholder="Namn" type="text")#first_name.validate
+                    label(for="first_name") Namn
+            .row
+                .input-field.col.s12.m6
+                    input(placeholder="T.ex. 0746497289" type="tel")#phonenumber.validate
+                    label(for="phonenumber") Mobilnummer
+            .row
+                .input-field.col.s12.m6
+                    select(multiple placeholder="Välj områden")
+                        label Ta emot SMS som skickas till:

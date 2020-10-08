@@ -1,0 +1,57 @@
+extends ../layout.pug
+block content
+    h2.red-text Dashboard - Jour
+    .row
+        .col.s12.l6
+            .card-panel.white
+                h4 Massutskick till volontärer
+                form(onsubmit="handleCrisisMailing(event)")#crisis-mailing-form
+                    .row
+                        .input-field.col.s12.m10
+                            input(type="text" placeholder="T.ex. Bränder i Dalarna")#notification-name.validate
+                            label(for="notification-name") Krisnamn
+                    .row
+                        .input-field.col.s12.m10
+                            input(type="number" placeholder="T.ex. 41" value="0")#volunteers-needed.validate
+                            label(for="volunteers-needed") Antal volontärer som behövs
+                    .row
+                        .input-field.col.s12.m10
+                            input(type="text" placeholder="T.ex. Regnkläder och handskar")#clothing-gear-needed.validate
+                            label(for="clothing-gear-needed") Kläder/utrustning
+                    .row
+                        .input-field.col.s12.m10
+                            input(type="text" placeholder="T.ex. Mora, Morastrand")#samlingsplats.validate
+                            label(for="samlingsplats") Samlingsplats
+                    .row
+                        .input-field.col.s12.m10
+                            input(type="text" placeholder="T.ex. 15:00 26 Oktober")#tidpunkt.validate
+                            label(for="tidpunkt") Mötestid
+                    .row
+                        .input-field.col.s12.m10
+                            p.grey-text Separera de olika uppgifterna med komman.
+                            input(type="text" placeholder="T.ex. Städning, Dela ut at, bädda sängar")#help_tasks.validate
+                            label(for="help_tasks") Hjälp som behövs
+                    .row
+                        .input-field.col.s12.m10
+                            textarea(type="text" placeholder="T.ex. Brändder härjar i stora delar av Dalarna" oninput="handleCrisisInfoMsgChange()")#textarea2.materialize-textarea
+                            label(for="textarea2") Kort information om kris för SMS
+                    .row
+                        .input-field.col.s12.m10
+                            select(multiple)
+                                option(value="" disabled selected) Välj områden
+                            label Områden för massutskick
+                    .row
+                        .input-field.col.s12.m10
+                            button(type="submit").btn.red.white-text.waves-effect.waves-light Skicka
+                                i.material-icons.right send
+        #kris-data.col.s12.l6
+        #sms-draft.col.s12.l6
+        .col.s12.l6
+            .card-panel.white
+                h5 Skickat från volontärer
+                #info-tip-list
+                    .card-panel.teal
+                        span.white-text Det behövs mer info kring tidpunkt
+                    .card-panel.teal
+                        span.white-text Krävs mer ansiktmasker i norra tältet.
+
