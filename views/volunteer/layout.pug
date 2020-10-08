@@ -8,11 +8,14 @@ html(lang="sv")
         link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
         link(href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection")
     body
-        #index-banner.section.no-pad-bot
+        .nav(style="background: #FFF; box-shadow: none;")
             .container
-                h4.cneter Du har tackat nej som volontär.
+                .nav-wrapper
+                    a(href="#" style="top:10px").brand-logo
+                        img(src="/images/logo.svg" style="height: 40px")
+        .container
+            block content
         script(src="https://code.jquery.com/jquery-2.1.1.min.js")
         script(src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js")
         script(src="/js/init.js")
-

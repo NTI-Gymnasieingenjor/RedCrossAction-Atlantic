@@ -94,6 +94,7 @@ $(document).ready(() => {
         $('select').append(optionString); 
     });
     $('select').formSelect();
+    handleCrisisInfoMsgChange();
 });
 
 function clearAllFields() {

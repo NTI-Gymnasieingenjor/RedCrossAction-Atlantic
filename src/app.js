@@ -88,21 +88,21 @@ let usersAnsweredYes = [];
 let usersAnsweredNo = [];
 app.get("/volunteer/:id", (req, res) => {
     if(usersAnsweredYes.includes(req.params.id)){
-        res.render("pages/volunteer_dashboard", {data: {userid: req.params.id}});
+        res.render("volunteer/dashboard", {data: {userid: req.params.id}});
     } else if (usersAnsweredNo.includes(req.params.id)){
-        res.render("pages/volunteer_no");
+        res.render("volunteer/no");
     } else {
-        res.render("pages/volunteer_confirm", {data: {userid: req.params.id}});
+        res.render("volunteer/confirm", {data: {userid: req.params.id}});
     }
 });
 
 app.get("/volunteer/:id/yes", (req, res) => {
-    res.render("pages/volunteer_dashboard", {data: {userid: req.params.id}});
+    res.render("volunteer/dashboard", {data: {userid: req.params.id}});
     usersAnsweredYes.push(req.params.id);
 });
 
 app.get("/volunteer/:id/no", (req, res) => {
-    res.render("pages/volunteer_no", {data: {userid: req.params.id}});
+    res.render("volunteer/no", {data: {userid: req.params.id}});
     usersAnsweredNo.push(req.params.id);
 });
 
