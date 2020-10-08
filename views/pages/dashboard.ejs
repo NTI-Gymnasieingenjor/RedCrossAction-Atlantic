@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-        <title>Röda Korset - Kan du delta som volontär?</title>
+        <title>Röda Korset - Dashboard - Jour</title>
 
         <!-- CSS  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -22,66 +22,66 @@
         </div>
 
         <div class="container">
-            <h2 class="red-text">Jour Dashboard</h2>
+            <h2 class="red-text">Dashboard - Jour</h2>
             <div class="row">
                 <div class="col s12 l6">
                     <div class="card-panel white">
-                        <h4>Kris massutskick</h4>
+                        <h4>Massutskick till volontärer</h4>
                         <form id="crisis-mailing-form" onsubmit="handleCrisisMailing(event)">
                             <div class="row">
                                 <div class="input-field col s12 m10">
-                                    <input id="notification-name" type="text" placeholder="Krisnamn" class="validate">
+                                    <input id="notification-name" type="text" placeholder="T.ex. Bränder i Dalarna" class="validate">
                                     <label for="notification-name">Krisnamn</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
-                                    <input id="volonteers-needed" type="number" placeholder="Antal volontärer som eferfrågas" class="validate" value="0">
+                                    <input id="volonteers-needed" type="number" placeholder="Antal volontärer som behövs" class="validate" value="0">
                                     <label for="volonteers-needed">Antal volontärer som behövs</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
-                                    <input id="clothing-gear-needed" type="text" placeholder="Speciella kläder/utrustning" class="validate">
-                                    <label for="clothing-gear-needed">Specialla kläder/utrustning</label>
+                                    <input id="clothing-gear-needed" type="text" placeholder="T.ex. Regnkläder och handskar" class="validate">
+                                    <label for="clothing-gear-needed">Kläder/utrustning</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
-                                    <input id="samlingsplats" type="text" placeholder="Samlingsplats" class="validate">
+                                    <input id="samlingsplats" type="text" placeholder="T.ex. Mora, Morastrand" class="validate">
                                     <label for="samlingsplats">Samlingsplats</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
-                                    <input id="tidpunkt" type="text" placeholder="Tidpunkt" class="validate">
-                                    <label for="tidpunkt">Tidpunkt</label>
+                                    <input id="tidpunkt" type="text" placeholder="T.ex. 15:00, 26 Oktober" class="validate">
+                                    <label for="tidpunkt">Mötestid</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
                                     <p class="grey-text">Separera de olika uppgifterna med komman.</p>
-                                    <input id="help_tasks" type="text" placeholder="Ex: städning, dela ut mat, bädda sängar" class="validate">
+                                    <input id="help_tasks" type="text" placeholder="T.ex. Städning, Dela ut mat, Bädda sängar" class="validate">
                                     <label for="help_tasks">Hjälp som behövs</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
                                     <textarea oninput="handleCrisisInfoMsgChange()" id="textarea2" class="materialize-textarea"></textarea>
-                                    <label for="textarea2">Info kring kris</label>
+                                    <label for="textarea2">Kort information om kris för SMS</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
                                     <select multiple>
-                                        <option value="" disabled selected>Välj alternativ</option>
+                                        <option value="" disabled selected>Välj områden</option>
                                     </select>
-                                    <label>Välj krisområde/krisområden</label>
+                                    <label>Områden för massutskick</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <button class="btn red white-text waves-effect waves-light" type="submit">
-                                    Skicka massutskick
+                                    Skicka
                                     <i class="material-icons right">send</i>
                                 </button>
                             </div>
@@ -94,7 +94,7 @@
                 </div>
                 <div class="col s12 l6">
                     <div class="card-panel white">
-                        <h5>Tips/Info från volontärer</h5>
+                        <h5>Skickat från volontärer</h5>
                         <div id="info-tip-list">
                             <div class="card-panel teal">
                                 <span class="white-text">
