@@ -22,9 +22,19 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+app.get("/", (req, res) => {
+    let isLoggedIn = req.session.role == "jour";
+    res.render("pages/home", {data: {isLoggedIn: isLoggedIn}}); 
+});
 
-app.get("/", (_, res) => {
-    res.render("pages/login");
+app.get("/login", (req, res) => {
+    let isLoggedIn = req.session.role == "jour";
+    res.render("pages/login", {data: {isLoggedIn: isLoggedIn}});
+});
+
+app.get("/logout", (req, res) => {
+    req.session.role="";
+    res.redirect("/");
 });
 
 app.post("/auth", (req, res) => {
@@ -54,12 +64,13 @@ app.post("/auth", (req, res) => {
 
 app.get("/dashboard", (req, res) => {
     if(req.session.role === "jour"){
-        res.render("pages/dashboard");
+        res.render("pages/dashboard", {data: {isLoggedIn: true}});
     } else {
         res.redirect("/");
     }
 });
 
+// Volunteer Signup
 app.get("/signup", (req, res) => {
     res.render("pages/signup");
 });

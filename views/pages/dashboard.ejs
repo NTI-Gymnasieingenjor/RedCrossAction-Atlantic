@@ -11,15 +11,8 @@
         <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     </head>
     <body>
-        <div class="container">
-            <nav style="background: #FFF; box-shadow: none;">
-                <div class="nav-wrapper">
-                    <a href="#" class="brand-logo" style="top: 10px">
-                        <img src="./images/logo.svg" style="height: 40px" /> 
-                    </a>
-                </div>
-            </nav>
-        </div>
+        
+        <%- include("../partials/navbar.ejs", {data: {isLoggedIn: data.isLoggedIn}}) %> 
 
         <div class="container">
             <h2 class="red-text">Dashboard - Jour</h2>
@@ -67,7 +60,7 @@
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m10">
-                                    <textarea oninput="handleCrisisInfoMsgChange()" id="textarea2" class="materialize-textarea"></textarea>
+                                    <textarea placeholder="Kort information om kris för SMS" oninput="handleCrisisInfoMsgChange()" id="textarea2" class="materialize-textarea"></textarea>
                                     <label for="textarea2">Kort information om kris för SMS</label>
                                 </div>
                             </div>
