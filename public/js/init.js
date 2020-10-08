@@ -171,7 +171,7 @@ function handleCrisisMailing(e){
     }, 7000);
 
     // Simulates fake info/tip from volunteer.
-    let listOfMessages = ["Zombies är arga :(", "Jag blev biten vad ska jag göra?", "Min granne beter sig skumt :((", "Min katt blev tagen, kommer den bli en zombie?", "Vad gör jag om jag blivit biten?", "GIMME BRAAAAINNNN!!!!", "..........................."];
+    let listOfMessages = ["Ska jag ta med gummistövlar?", "Jag har en traktor, hjälper det om jag tar med den?", "Är det ok om mina två döttrar, en 16åring och en 13åring, följer med?", "Jag har inga arbetshandskar, finns det att låna?"];
     let messageInterval = window.setInterval(() => {
         if(listOfMessages.length){
             let msg = listOfMessages.shift();
