@@ -24,7 +24,11 @@ block content
                             label(for="samlingsplats") Samlingsplats
                     .row
                         .input-field.col.s12.m10
-                            input(type="text" placeholder="T.ex. 15:00, 26 oktober")#tidpunkt.validate
+                            input(type="date" placeholder="datum")#datum.validate
+                            label(for="datum") Mötesdatum
+                    .row
+                        .input-field.col.s12.m10
+                            input(type="text" placeholder="T.ex. 15:00")#tidpunkt.validate
                             label(for="tidpunkt") Mötestid
                     .row
                         .input-field.col.s12.m10

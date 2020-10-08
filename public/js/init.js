@@ -144,7 +144,23 @@ function handleCrisisMailing(e){
                         suggestedMax: volunteersNeeded
                     }
                 }]
-            }
+            },
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: 'rgb(0,0,0)',
+                    fontSize: 16,
+                    generateLabels: function(chart) {
+                        labels = Chart.defaults.global.legend.labels.generateLabels(chart);
+                        for (var key in labels) {
+                            labels[key].text = "Svar från volontärer.";
+                            labels[key].fillStyle = "rgb(255, 255, 255)";
+                            labels[key].strokeStyle = "rgb(255, 255, 255)";
+                        }
+                        return labels;
+                    }
+                }
+            },
         }
     });
 
