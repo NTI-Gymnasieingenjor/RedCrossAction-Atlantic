@@ -22,8 +22,11 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+app.get("/", (req, res) => {
+    res.render("pages/home"); 
+});
 
-app.get("/", (_, res) => {
+app.get("/login", (req, res) => {
     res.render("pages/login");
 });
 
