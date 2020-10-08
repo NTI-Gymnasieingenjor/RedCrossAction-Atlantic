@@ -56,3 +56,8 @@
 .navbar .sidenav-trigger {
     color: red;
 }
+
+.time-stamp {
+    float: right;
+    font-size: 0.9em;
+}
