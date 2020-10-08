@@ -1,4 +1,5 @@
 extends ../layout.pug
+
 block content
     .row
         form.col.s12
@@ -13,5 +14,6 @@ block content
                     label(for="phonenumber") Mobilnummer
             .row
                 .input-field.col.s12.m6
-                    select(multiple placeholder="Välj områden")
+                    select(multiple)
+                        option(value="" disabled) Välj områden
                         label Ta emot SMS som skickas till:
