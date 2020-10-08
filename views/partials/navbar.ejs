@@ -6,14 +6,22 @@
             </a>
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a class="black-text" href="/dashboard">Dashboard</a></li>
-                <li><a class="btn" href="/login">Login</a></li>
+                <% if(data.isLoggedIn){ %>
+                    <li><a class="black-text" href="/dashboard">Dashboard</a></li>
+                    <li><a class="btn" href="/logout">Logout</a></li>
+                <% } else { %>
+                    <li><a class="btn" href="/login">Login</a></li>
+                <% } %>
             </ul>
         </div>
     </div>
 </nav>
 
 <ul class="sidenav" id="mobile-demo">
-    <li><a href="/dashboard">Dashboard</a></li>
-    <li><a class="btn" href="/login">Login</a></li>
+    <% if(data.isLoggedIn){ %>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a class="btn" href="/logout">Logout</a></li>
+    <% } else { %>
+        <li><a class="btn" href="/login">Login</a></li>
+    <% } %>
 </ul>
