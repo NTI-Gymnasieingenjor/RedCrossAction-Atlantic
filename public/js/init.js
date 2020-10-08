@@ -191,7 +191,9 @@ function handleCrisisMailing(e){
     let messageInterval = window.setInterval(() => {
         if(listOfMessages.length){
             let msg = listOfMessages.shift();
-            $("#info-tip-list").append('<div class="card-panel teal"><span class="white-text">' + msg + '</span></div>');
+            let now = new Date();
+            let timestamp = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
+            $("#info-tip-list").append('<div class="card-panel teal"><span class="time-stamp grey-text text-lighten-2">' + timestamp + '</span><span class="white-text">' + msg + '</span></div>');
         } else {
             clearInterval(messageInterval);
         }
