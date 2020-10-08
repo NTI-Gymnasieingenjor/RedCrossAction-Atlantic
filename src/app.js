@@ -1,8 +1,7 @@
-import bodyParser from 'body-parser';
-import express from "express";
-import path from 'path';
-import session from 'express-session';
-import sqlite3 from "sqlite3"
+const bodyParser = require('body-parser');
+const express = require("express");
+const session = require('express-session');
+const sqlite3 = require("sqlite3");
 
 const app = express();
 const port = 8080;
