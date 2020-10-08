@@ -94,12 +94,30 @@ $(document).ready(() => {
         $('select').append(optionString); 
     });
     $('select').formSelect();
+    handleCrisisInfoMsgChange();
 });
+
+function clearAllFields() {
+    $("#crisis-mailing-form :input").each(function(){
+        $(this).val("");
+    });
+    $("#crisis-mailing-form textarea").val("");
+}
+
+function handleCrisisInfoMsgChange() {
+    let crisisInfoMsg = $("#textarea2").val();
+    
+    if(crisisInfoMsg.length)
+        $("#sms-draft").html('<div class="card-panel white"><h5>Utkast för SMS</h5><p>Hej Kalle! <span id="crisis-info-msg" class="red-text">'+crisisInfoMsg+'</span>. Har du möjlighet att delta som volontär? Klicka här för mer information: https://www.rodakorset.se/volunteer</p></div>');
+    else
+        $("#sms-draft").html("");
+}
 
 function handleCrisisMailing(e){
     e.preventDefault();
+
     let crisisName = $("#notification-name").val()
-    let volonteersNeeded = parseInt($("#volonteers-needed").val());
+    let volunteersNeeded = parseInt($("#volunteers-needed").val());
     $("#kris-data").append('<div class="card-panel white"><h6>' + crisisName + '</h6></div>')
     $("#kris-data > .card-panel").append("<canvas id=\"myChart\"></canvas>");
     
@@ -115,7 +133,7 @@ function handleCrisisMailing(e){
                     "#f44336",
                     "#bdbdbd"
                 ],
-                data: [0, 0, volonteersNeeded]
+                data: [0, 0, volunteersNeeded]
             }]
         },
 
@@ -124,13 +142,33 @@ function handleCrisisMailing(e){
                 yAxes: [{
                     ticks: {
                         suggestedMin: 0,
-                        suggestedMax: volonteersNeeded
+                        suggestedMax: volunteersNeeded
                     }
                 }]
-            }
+            },
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: 'rgb(0,0,0)',
+                    fontSize: 16,
+                    generateLabels: function(chart) {
+                        labels = Chart.defaults.global.legend.labels.generateLabels(chart);
+                        for (var key in labels) {
+                            labels[key].text = "Svar från volontärer.";
+                            labels[key].fillStyle = "rgb(255, 255, 255)";
+                            labels[key].strokeStyle = "rgb(255, 255, 255)";
+                        }
+                        return labels;
+                    }
+                }
+            },
         }
     });
 
+
+    clearAllFields();
+    handleCrisisInfoMsgChange();
+    
     // Simulates fake data.
     let tid = window.setInterval(() => {
         if(chart.data.datasets[0].data[2] == 0){
@@ -147,7 +185,28 @@ function handleCrisisMailing(e){
             updateChartData(chart, 1, 1)
             updateChartData(chart, 2, -1)
         }
-    }, 7000); 
+    }, 7000);
+
+    // Simulates fake info/tip from volunteer.
+    let listOfMessages = ["Ska jag ta med gummistövlar?", "Jag har en traktor, hjälper det om jag tar med den?", "Är det ok om mina två döttrar, en 16åring och en 13åring, följer med?", "Jag har inga arbetshandskar, finns det att låna?"];
+    let messageInterval = window.setInterval(() => {
+        if(listOfMessages.length){
+            let msg = listOfMessages.shift();
+            let now = new Date();
+            let timestamp = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
+            $("#info-tip-list").prepend('<div class="card-panel teal info-msg"><span class="time-stamp grey-text text-lighten-2">' + timestamp + '</span><span class="white-text">' + msg + '</span></div>');
+        } else {
+            clearInterval(messageInterval);
+        }
+    }, 10000)
+}
+
+function handleMoreInfoToggle(e) {
+    if (e.target.checked) {
+        $("#more-info-field").append('<textarea class="materialize-textarea" placeholder="Mer info angående krisen" id="textarea3"></textarea></div>')
+    } else {
+        $("#more-info-field").html("");
+    }
 }
 
 function updateChartData(chart, dataIndex, amount){

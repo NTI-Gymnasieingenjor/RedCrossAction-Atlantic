@@ -1,0 +1,30 @@
+{
+  "name": "redcrossaction-atlantic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/app.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express-session": "^1.17.1",
+    "pug": "^3.0.0",
+    "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "express": "^4.17.1"
+  },
+  "scripts": {
+    "nodemon": "nodemon -e app.js --exec \"npm start\"",
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NTI-Gymnasieingenjor/RedCrossAction-Atlantic.git"
+  },
+  "author": "Atlantic TE4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NTI-Gymnasieingenjor/RedCrossAction-Atlantic/issues"
+  },
+  "homepage": "https://github.com/NTI-Gymnasieingenjor/RedCrossAction-Atlantic#readme"
+}

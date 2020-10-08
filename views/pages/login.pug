@@ -1,0 +1,21 @@
+extends ../layout.pug
+block content
+    h2.red-text Dashboard - Jour
+    .row
+        .col.s12.l6
+            .card-panel.white
+                h4 Logga in
+                if typeof data !== "undefined"
+                    p.red-text= data.error_msg
+                form(method="POST" action="/auth")
+                    .row
+                        .input-field.col.s12.m10
+                            input(required name="username" type="text" placeholder="Användarnamn")#username.validate
+                            label(for="username") Användarnamn
+                    .row
+                        .input-field.col.s12.m10
+                            input(required name="password" type="password" placeholder="Lösenord")#password.validate
+                            label(for="password") Lösenord
+                    .row
+                        button(type="submit").btn.red.white-text.waves-effect.waves-light Logga In
+                            i.material-icons.right lock

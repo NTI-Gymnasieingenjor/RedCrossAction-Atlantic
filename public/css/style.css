@@ -26,6 +26,7 @@
 #googleMaps {
     width: 100%;
     border: 0px;
+	height:33vh;
 }
 
 /* label color */
@@ -45,4 +46,37 @@
     color: #FFF;
     border-bottom: 1px solid #FFF;
     box-shadow: none;
+}
+
+.navbar {
+    background-color: #FFF;
+    box-shadow: none;
+}
+
+.navbar .sidenav-trigger {
+    color: red;
+}
+
+.time-stamp {
+    float: right;
+    font-size: 0.9em;
+}
+#sms-draft {
+	line-break: anywhere;
+}
+
+@keyframes loadSlide {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.info-msg {
+    animation-name: loadSlide;
+    animation-duration: 0.75s;
+    animation-direction: forwards;
 }

@@ -1,0 +1,27 @@
+nav.navbar
+    .container
+        .nav-wrapper
+            a(href="#!").brand-logo
+                img(src="/images/logo.svg" style="height: 50px; margin-top: 5px;" alt="Röda Korset Logo")
+            a(href="#" data-target="mobile-demo" class="sidenav-trigger")
+                i.material-icons menu
+            ul.right.hide-on-med-and-down
+                if isLoggedIn
+                    li
+                        a(href="/dashboard").black-text Dashboard
+                    li
+                        a(href="/logout").btn Logout
+                else
+                    li
+                        a(href="/signup").black-text Registera som volontär
+                    li
+                        a(href="/login").btn Login
+ul#mobile-demo.sidenav
+    if isLoggedIn
+        li
+            a(href="/dashboard") Dashboard
+        li
+            a(href="/logout").btn Logout
+    else
+        li
+            a(href="/login").btn Login
