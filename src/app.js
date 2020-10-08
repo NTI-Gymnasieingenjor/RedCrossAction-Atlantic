@@ -11,7 +11,7 @@ const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READONLY, err => {
         console.error(err);
 });
 
-app.set("view engine", "ejs");
+app.set("view engine", "pug");
 app.use(express.static('public'))
 
 app.use(session({
