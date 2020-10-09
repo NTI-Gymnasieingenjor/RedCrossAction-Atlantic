@@ -88,43 +88,45 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/send-sms", (req, res) => {
-    console.log(req.body.crisisMsg);
-    console.log(req.body.areas);
-//    const username = process.env["API_USERNAME"]
-//    const password = process.env["API_PASSWORD"]
-//    const postFields = {
-//        from:    "RödaKorset",
-//        to:      "+46735950413",
-//        message: "Bring a sweater it's cold outside!"
-//    }
-//
-//    const key = new Buffer(username + ':' + password).toString('base64')
-//    const postData = querystring.stringify(postFields)
-//
-//    const options = {
-//        hostname: 'api.46elks.com',
-//        path:     '/a1/SMS',
-//        method:   'POST',
-//        headers:  {
-//            'Authorization': 'Basic ' + key
-//        }
-//    }
-//
-//    const callback = (response) => {
-//        var str = ''
-//        response.on('data', (chunk) => {
-//            str += chunk
-//        })
-//
-//        response.on('end', () => {
-//            console.log(str)
-//        })
-//    }
-//
-//    var request = https.request(options, callback)
-//    request.write(postData)
-//    request.end()
-  
+    const crisisMsg = req.body.crisisMsg
+    const areas = req.body.areas
+
+    const username = process.env["API_USERNAME"]
+    const password = process.env["API_PASSWORD"]
+
+    const postFields = {
+        dryrun:  "yes",
+        from:    "RK",
+        to:      "+46735950413",
+        message: "Hej Elias! " + crisisMsg + ". Har du möjlighet att delta som volontär? Klicka här för mer information: https://www.rodakorset.se"
+    }
+
+    const key = new Buffer(username + ':' + password).toString('base64')
+    const postData = querystring.stringify(postFields)
+
+    const options = {
+        hostname: 'api.46elks.com',
+        path:     '/a1/SMS',
+        method:   'POST',
+        headers:  {
+            'Authorization': 'Basic ' + key
+        }
+    }
+
+    const callback = (response) => {
+        var str = ''
+        response.on('data', (chunk) => {
+            str += chunk
+        })
+
+        response.on('end', () => {
+            res.json(str);
+        })
+    }
+
+    var request = https.request(options, callback)
+    request.write(postData)
+    request.end() 
 });
 
 app.get("/dashboard", (req, res) => {
