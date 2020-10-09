@@ -66,6 +66,23 @@ app.post("/auth", (req, res) => {
     }
 });
 
+// Handles volunteer registration
+
+let registeredVolunteers = [];
+app.post("/signup", (req, res) => {
+    const firstName = req.body.firstname;
+    const phoneNumber = req.body.phonenumber;
+    const area = req.body.area;
+
+    registeredVolunteers.push({
+        firstName: firstName,
+        phoneNumber: phoneNumber,
+        area: area
+    });
+
+    res.redirect("/");
+});
+
 app.get("/dashboard", (req, res) => {
     if(res.locals.isLoggedIn){
         res.render("pages/dashboard");
