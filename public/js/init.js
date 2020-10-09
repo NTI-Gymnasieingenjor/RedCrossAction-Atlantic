@@ -116,6 +116,13 @@ function handleCrisisInfoMsgChange() {
 function handleCrisisMailing(e){
     e.preventDefault();
 
+
+    fetch("/send-sms", {
+        method: 'POST',
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+
     let crisisName = $("#notification-name").val()
     let volunteersNeeded = parseInt($("#volunteers-needed").val());
     $("#kris-data").append('<div class="card-panel white"><h6>' + crisisName + '</h6></div>')

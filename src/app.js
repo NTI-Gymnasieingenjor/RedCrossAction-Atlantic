@@ -2,6 +2,12 @@ const bodyParser = require('body-parser');
 const express = require("express");
 const session = require('express-session');
 const sqlite3 = require("sqlite3");
+const https = require('https')
+const querystring = require('querystring')
+
+require('dotenv').config({path: __dirname + '/../.env'});
+
+console.log(process.env["API_PASSWORD"])
 
 const app = express();
 const port = 8080;
@@ -81,6 +87,44 @@ app.post("/signup", (req, res) => {
     });
 
     res.redirect("/");
+});
+
+app.post("/send-sms", (req, res) => {
+    const username = process.env["API_USERNAME"]
+    const password = process.env["API_PASSWORD"]
+    const postFields = {
+        from:    "",
+        to:      "+46735950413",
+        message: "Bring a sweater it's cold outside!"
+    }
+
+    const key = new Buffer(username + ':' + password).toString('base64')
+    const postData = querystring.stringify(postFields)
+
+    const options = {
+        hostname: 'api.46elks.com',
+        path:     '/a1/SMS',
+        method:   'POST',
+        headers:  {
+            'Authorization': 'Basic ' + key
+        }
+    }
+
+    const callback = (response) => {
+        var str = ''
+        response.on('data', (chunk) => {
+            str += chunk
+        })
+
+        response.on('end', () => {
+            console.log(str)
+        })
+    }
+
+    var request = https.request(options, callback)
+    request.write(postData)
+    request.end()
+  
 });
 
 app.get("/dashboard", (req, res) => {
