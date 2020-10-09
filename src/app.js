@@ -7,8 +7,6 @@ const querystring = require('querystring')
 
 require('dotenv').config({path: __dirname + '/../.env'});
 
-console.log(process.env["API_PASSWORD"])
-
 const app = express();
 const port = 8080;
 
@@ -72,8 +70,8 @@ app.post("/auth", (req, res) => {
     }
 });
 
-// Handles volunteer registration
 
+// Handles volunteer registration
 let registeredVolunteers = [];
 app.post("/signup", (req, res) => {
     const firstName = req.body.firstname;
@@ -90,40 +88,42 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/send-sms", (req, res) => {
-    const username = process.env["API_USERNAME"]
-    const password = process.env["API_PASSWORD"]
-    const postFields = {
-        from:    "",
-        to:      "+46735950413",
-        message: "Bring a sweater it's cold outside!"
-    }
-
-    const key = new Buffer(username + ':' + password).toString('base64')
-    const postData = querystring.stringify(postFields)
-
-    const options = {
-        hostname: 'api.46elks.com',
-        path:     '/a1/SMS',
-        method:   'POST',
-        headers:  {
-            'Authorization': 'Basic ' + key
-        }
-    }
-
-    const callback = (response) => {
-        var str = ''
-        response.on('data', (chunk) => {
-            str += chunk
-        })
-
-        response.on('end', () => {
-            console.log(str)
-        })
-    }
-
-    var request = https.request(options, callback)
-    request.write(postData)
-    request.end()
+    console.log(req.body.crisisMsg);
+    console.log(req.body.areas);
+//    const username = process.env["API_USERNAME"]
+//    const password = process.env["API_PASSWORD"]
+//    const postFields = {
+//        from:    "RödaKorset",
+//        to:      "+46735950413",
+//        message: "Bring a sweater it's cold outside!"
+//    }
+//
+//    const key = new Buffer(username + ':' + password).toString('base64')
+//    const postData = querystring.stringify(postFields)
+//
+//    const options = {
+//        hostname: 'api.46elks.com',
+//        path:     '/a1/SMS',
+//        method:   'POST',
+//        headers:  {
+//            'Authorization': 'Basic ' + key
+//        }
+//    }
+//
+//    const callback = (response) => {
+//        var str = ''
+//        response.on('data', (chunk) => {
+//            str += chunk
+//        })
+//
+//        response.on('end', () => {
+//            console.log(str)
+//        })
+//    }
+//
+//    var request = https.request(options, callback)
+//    request.write(postData)
+//    request.end()
   
 });
 
