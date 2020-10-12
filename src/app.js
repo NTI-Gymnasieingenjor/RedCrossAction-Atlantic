@@ -2,10 +2,9 @@ const bodyParser = require('body-parser');
 const express = require("express");
 const session = require('express-session');
 const sqlite3 = require("sqlite3");
-const https = require('https')
-const querystring = require('querystring')
 const helmet = require('helmet');
 const md5 = require('md5');
+const fetch = require('node-fetch');
 
 require('dotenv').config({path: __dirname + '/../.env'});
 
@@ -188,43 +187,35 @@ app.post("/api/send-sms", (req, res) => {
     const password = process.env["API_PASSWORD"]
 
     let sentSMS = []
-
-    listOfVolunteers.forEach((volunteer) => {
-        const postFields = {
-            dryrun:  "yes",
-            from:    "RK",
-            to:      volunteer.phoneNumber,
-            message: "Hej " + volunteer.firstName + "! " + crisisMsg + ". Har du möjlighet att delta som volontär? Klicka här för mer information: https://www.rodakorset.se/volunteer/" + volunteer.firstName
-        }
-
-        const key = new Buffer(username + ':' + password).toString('base64')
-        const postData = querystring.stringify(postFields)
-
-        const options = {
-            hostname: 'api.46elks.com',
-            path:     '/a1/SMS',
-            method:   'POST',
-            headers:  {
-                'Authorization': 'Basic ' + key
-            }
-        }
-
-        const callback = (response) => {
-            var str = ''
-            response.on('data', (chunk) => {
-                str += chunk
-            })
-
-            response.on('end', () => {
-                sentSMS.push(str);
-            })
-        }
-
-        var request = https.request(options, callback);
-        request.write(postData);
-        request.end();
+    // Making sendMessages into promise to be able to call function
+    // when all messages is sent.
+    let sendMessages = new Promise((resolve, reject) => {
+        listOfVolunteers.forEach((volunteer, indx) => {
+            let url = "https://api.46elks.com/a1/SMS"
+            let message = "Hej " + volunteer.firstName + "! " + crisisMsg + ". Har du möjlighet att delta som volontär? Klicka här för mer information: https://www.rodakorset.se/volunteer/" + volunteer.firstName
+            const key = new Buffer(username + ':' + password).toString('base64')
+            fetch("https://api.46elks.com/a1/sms", {
+                body: "dryrun=yes&from=RK&to=" + volunteer.phoneNumber + "&message=" + message,
+                headers: {
+                    "Authorization": 'Basic ' + key,
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                method: "POST"
+            }).then(result => result.json())
+            .then(data => {
+                sentSMS.push(data);
+                // Checks if last iteration of loop and then resolves this promise.
+                if(indx === listOfVolunteers.length -1){
+                    resolve();
+                }
+            });
+        });
     });
-    res.json(sentSMS);
+
+    // Runs when all messages have been sent.
+    sendMessages.then(() => {
+        res.json(sentSMS);
+    })
 });
 
 app.listen(port, () => {

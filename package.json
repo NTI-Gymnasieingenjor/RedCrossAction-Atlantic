@@ -9,6 +9,7 @@
     "express-session": "^1.17.1",
     "helmet": "^4.1.1",
     "md5": "^2.3.0",
+    "node-fetch": "^2.6.1",
     "pug": "^3.0.0",
     "sqlite3": "^5.0.0"
   },
