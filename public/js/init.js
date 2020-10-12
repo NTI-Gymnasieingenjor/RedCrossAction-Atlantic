@@ -113,8 +113,26 @@ function handleCrisisInfoMsgChange() {
         $("#sms-draft").html("");
 }
 
+function sendSmsRequest(){
+    let crisisMsg = $("#textarea2").val();
+    let areas = $("select").val();
+
+    let body = {crisisMsg: crisisMsg, areas: areas}
+    fetch("/send-sms", {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+}
+
 function handleCrisisMailing(e){
     e.preventDefault();
+
+    sendSmsRequest();
 
     let crisisName = $("#notification-name").val()
     let volunteersNeeded = parseInt($("#volunteers-needed").val());
