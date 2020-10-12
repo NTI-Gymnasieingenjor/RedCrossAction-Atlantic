@@ -112,13 +112,13 @@ function handleCrisisInfoMsgChange() {
     else
         $("#sms-draft").html("");
 }
-
+let currenetEmergency = "";
 function sendSmsRequest(){
     let crisisMsg = $("#textarea2").val();
     let areas = $("select").val();
 
     let body = {crisisMsg: crisisMsg, areas: areas}
-    fetch("/send-sms", {
+    fetch("/api/send-sms", {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
@@ -126,7 +126,25 @@ function sendSmsRequest(){
         },
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => console.log(data));
+    fetch("/api/emergency/add", {
+        method: 'POST',
+        body: JSON.stringify({
+            emergency_name: $("#notification-name").val(),
+            volunteer_count: $("#volunteers-needed").val(),
+            equpment_list: $("#clothing-hear-needed").val(),
+            assembly_point: $("#samlingsplats").val(),
+            assembly_date: $("#datum").val(),
+            assembly_time: $("tidpunkt").val(),
+            help_needed: $("#help_Tasks").val(),
+            sms_text: $("#textarea2").val(),
+            areas: $("select").val(),
+            more_info: $("#more-info-field").val()
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json()).then(data => { console.log(data); currenetEmergency = data.emergency_id;});
 }
 
 function handleCrisisMailing(e){
@@ -186,24 +204,17 @@ function handleCrisisMailing(e){
 
     clearAllFields();
     handleCrisisInfoMsgChange();
-    
+
     // Simulates fake data.
     let tid = window.setInterval(() => {
-        if(chart.data.datasets[0].data[2] == 0){
-            clearInterval(tid);
-        } else {
-            updateChartData(chart, 0, 1)
-            updateChartData(chart, 2, -1)
-        }
+        fetch("/api/emergency/"+currenetEmergency).then(res => res.json()).then(data => {
+            let yes = data.vol_accepted;
+            let count = data.vol_count;
+            chart.data.datasets[0].data[0] = yes;
+            chart.data.datasets[0].data[2] = count-yes;
+            chart.update();
+        });
     }, 3000);
-    let sid = window.setInterval(() => {
-        if(chart.data.datasets[0].data[2] == 0){
-            clearInterval(sid);
-        } else {
-            updateChartData(chart, 1, 1)
-            updateChartData(chart, 2, -1)
-        }
-    }, 7000);
 
     // Simulates fake info/tip from volunteer.
     let listOfMessages = ["Ska jag ta med gummistövlar?", "Jag har en traktor, hjälper det om jag tar med den?", "Är det ok om mina två döttrar, en 16åring och en 13åring, följer med?", "Jag har inga arbetshandskar, finns det att låna?"];

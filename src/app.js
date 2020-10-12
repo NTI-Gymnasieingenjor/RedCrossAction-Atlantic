@@ -5,6 +5,7 @@ const sqlite3 = require("sqlite3");
 const https = require('https')
 const querystring = require('querystring')
 const helmet = require('helmet');
+const md5 = require('md5');
 
 require('dotenv').config({path: __dirname + '/../.env'});
 
@@ -38,6 +39,8 @@ app.use(function(req, res, next) {
     res.locals.isLoggedIn = isLoggedIn;
     next();
 });
+
+let emergencies = {};
 
 app.get("/", (req, res) => {
     res.render("pages/home");
@@ -94,7 +97,74 @@ app.post("/signup", (req, res) => {
     res.redirect("/");
 });
 
-app.post("/send-sms", (req, res) => {
+
+app.get("/dashboard", (req, res) => {
+    if(res.locals.isLoggedIn){
+        res.render("pages/dashboard");
+    } else {
+        res.redirect("/");
+    }
+});
+
+// Volunteer Signup
+app.get("/signup", (req, res) => {
+    res.render("pages/signup");
+});
+
+app.get("/moreinfo", (req, res) => {
+    res.render("pages/more_info");
+});
+
+// Temp array to keep ids who opened link.
+let usersAnsweredYes = [];
+let usersAnsweredNo = [];
+app.get("/volunteer/:id", (req, res) => {
+    if(usersAnsweredYes.includes(req.params.id)){
+        res.render("volunteer/dashboard", {data: {userid: req.params.id}});
+    } else if (usersAnsweredNo.includes(req.params.id)){
+        res.render("volunteer/no");
+    } else {
+        res.render("volunteer/confirm", {data: {userid: req.params.id}});
+    }
+});
+
+app.get("/volunteer/:id/yes", (req, res) => {
+    res.render("volunteer/dashboard", {data: {userid: req.params.id}});
+    usersAnsweredYes.push(req.params.id);
+});
+
+app.get("/volunteer/:id/no", (req, res) => {
+    res.render("volunteer/no", {data: {userid: req.params.id}});
+    usersAnsweredNo.push(req.params.id);
+});
+
+app.post("/api/emergency/add", (req, res) => {
+    if(!res.locals.isLoggedIn) return res.send("Unauthorized");
+    let id = md5(req.body.emergency_name+new Date);
+    emergencies[id] = {
+        name: req.body.emergency_name,
+        vol_accepted: 0,
+        vol_count: req.body.volunteer_count,
+        equipment: req.body.equipment_list,
+        assembly_point: req.body.assembly_point,
+        assembly_date: req.body.assembly_date,
+        assembly_time: req.body.assembly_time,
+        help_needed: req.body.help_needed,
+        sms_text: req.body.sms_text,
+        affected_areas: req.body.areas,
+        more_info: req.body.more_info ? req.body.more_info : ""
+    };
+    res.json({emergency_id: id});
+});
+
+app.get('/api/emergency/:id', (req, res) => {
+    if(!res.locals.isLoggedIn) return res.send("Unauthorized");
+    emergencies[req.params.id].vol_accepted = usersAnsweredYes.length;
+    res.json(emergencies[req.params.id]);
+});
+
+
+app.post("/api/send-sms", (req, res) => {
     const crisisMsg = req.body.crisisMsg
     const areas = req.body.areas
 
@@ -146,57 +216,15 @@ app.post("/send-sms", (req, res) => {
             })
 
             response.on('end', () => {
-                console.log(str)
                 sentSMS.push(str);
             })
         }
 
-        var request = https.request(options, callback)
-        request.write(postData)
-        request.end() 
+        var request = https.request(options, callback);
+        request.write(postData);
+        request.end();
     });
-
     res.json(sentSMS);
-});
-
-app.get("/dashboard", (req, res) => {
-    if(res.locals.isLoggedIn){
-        res.render("pages/dashboard");
-    } else {
-        res.redirect("/");
-    }
-});
-
-// Volunteer Signup
-app.get("/signup", (req, res) => {
-    res.render("pages/signup");
-});
-
-app.get("/moreinfo", (req, res) => {
-    res.render("pages/more_info");
-});
-
-// Temp array to keep ids who opened link.
-let usersAnsweredYes = [];
-let usersAnsweredNo = [];
-app.get("/volunteer/:id", (req, res) => {
-    if(usersAnsweredYes.includes(req.params.id)){
-        res.render("volunteer/dashboard", {data: {userid: req.params.id}});
-    } else if (usersAnsweredNo.includes(req.params.id)){
-        res.render("volunteer/no");
-    } else {
-        res.render("volunteer/confirm", {data: {userid: req.params.id}});
-    }
-});
-
-app.get("/volunteer/:id/yes", (req, res) => {
-    res.render("volunteer/dashboard", {data: {userid: req.params.id}});
-    usersAnsweredYes.push(req.params.id);
-});
-
-app.get("/volunteer/:id/no", (req, res) => {
-    res.render("volunteer/no", {data: {userid: req.params.id}});
-    usersAnsweredNo.push(req.params.id);
 });
 
 app.listen(port, () => {
