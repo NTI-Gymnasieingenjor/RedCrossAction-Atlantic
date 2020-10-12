@@ -18,7 +18,12 @@ const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READONLY, err => {
 
 app.set("view engine", "pug");
 app.use(express.static('public'));
-app.use(helmet());
+app.use(helmet(
+    {
+        contentSecurityPolicy: false,
+        hsts: false,
+    }
+));
 
 app.use(session({
     resave: false,
@@ -93,42 +98,65 @@ app.post("/send-sms", (req, res) => {
     const crisisMsg = req.body.crisisMsg
     const areas = req.body.areas
 
+    let listOfVolunteers = [];
+    registeredVolunteers.forEach((volun) => {
+        // Checks if volunteer only selected 1 area
+        if(typeof volun.area === "string"){
+            if (areas.includes(volun.area)) {
+                listOfVolunteers.push(volun)
+            }
+        } else {
+            // Checks if volunteer has selected any of the crisis areas
+            let matchingAreas = areas.filter((area, indx) => volun.area.includes(area))
+            if(matchingAreas.length > 0){
+                listOfVolunteers.push(volun)
+            }
+        }
+    });
+
     const username = process.env["API_USERNAME"]
     const password = process.env["API_PASSWORD"]
 
-    const postFields = {
-        dryrun:  "yes",
-        from:    "RK",
-        to:      "+46735950413",
-        message: "Hej Elias! " + crisisMsg + ". Har du möjlighet att delta som volontär? Klicka här för mer information: https://www.rodakorset.se"
-    }
+    let sentSMS = []
 
-    const key = new Buffer(username + ':' + password).toString('base64')
-    const postData = querystring.stringify(postFields)
-
-    const options = {
-        hostname: 'api.46elks.com',
-        path:     '/a1/SMS',
-        method:   'POST',
-        headers:  {
-            'Authorization': 'Basic ' + key
+    listOfVolunteers.forEach((volunteer) => {
+        const postFields = {
+            dryrun:  "yes",
+            from:    "RK",
+            to:      volunteer.phoneNumber,
+            message: "Hej " + volunteer.firstName + "! " + crisisMsg + ". Har du möjlighet att delta som volontär? Klicka här för mer information: https://www.rodakorset.se/volunteer/" + volunteer.firstName
         }
-    }
 
-    const callback = (response) => {
-        var str = ''
-        response.on('data', (chunk) => {
-            str += chunk
-        })
+        const key = new Buffer(username + ':' + password).toString('base64')
+        const postData = querystring.stringify(postFields)
 
-        response.on('end', () => {
-            res.json(str);
-        })
-    }
+        const options = {
+            hostname: 'api.46elks.com',
+            path:     '/a1/SMS',
+            method:   'POST',
+            headers:  {
+                'Authorization': 'Basic ' + key
+            }
+        }
 
-    var request = https.request(options, callback)
-    request.write(postData)
-    request.end() 
+        const callback = (response) => {
+            var str = ''
+            response.on('data', (chunk) => {
+                str += chunk
+            })
+
+            response.on('end', () => {
+                console.log(str)
+                sentSMS.push(str);
+            })
+        }
+
+        var request = https.request(options, callback)
+        request.write(postData)
+        request.end() 
+    });
+
+    res.json(sentSMS);
 });
 
 app.get("/dashboard", (req, res) => {
