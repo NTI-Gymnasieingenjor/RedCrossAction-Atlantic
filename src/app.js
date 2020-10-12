@@ -4,6 +4,7 @@ const session = require('express-session');
 const sqlite3 = require("sqlite3");
 const https = require('https')
 const querystring = require('querystring')
+const helmet = require('helmet');
 
 require('dotenv').config({path: __dirname + '/../.env'});
 
@@ -16,7 +17,8 @@ const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READONLY, err => {
 });
 
 app.set("view engine", "pug");
-app.use(express.static('public'))
+app.use(express.static('public'));
+app.use(helmet());
 
 app.use(session({
     resave: false,
