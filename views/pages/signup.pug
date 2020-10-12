@@ -10,8 +10,8 @@ block content
                     label(for="first_name") * Förnamn
             .row
                 .input-field.col.s12.m6
+                    label(style="top: -25px; font-size: 0.8rem") * Mobilnummer
                     input(required placeholder="T.ex. 0746497289" type="tel" name="phonenumber")#phonenumber.validate
-                    label(for="phonenumber") * Mobilnummer
             .row
                 .input-field.col.s12.m6
                     select(required multiple name="area")
@@ -21,3 +21,10 @@ block content
                 .input-field.col.s12.m10
                     button(type="submit").btn.red.white-text.waves-effect.waves-light Registrera
                         i.material-icons.right send
+
+    script(src="/js/intlTelInput.js")
+    script.
+        var input = document.querySelector("#phonenumber");
+        window.intlTelInput(input, {
+            // any initialisation options go here
+        });
