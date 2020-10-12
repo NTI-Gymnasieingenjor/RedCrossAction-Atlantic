@@ -8,8 +8,8 @@ block content
                 form(onsubmit="handleCrisisMailing(event)")#crisis-mailing-form
                     .row
                         .input-field.col.s12.m10
-                            input(type="text" placeholder="T.ex. Bränder i Dalarna")#notification-name.validate
-                            label(for="notification-name") Krisnamn
+                            input(required type="text" placeholder="T.ex. Bränder i Dalarna")#notification-name.validate
+                            label(for="notification-name") * Krisnamn
                     .row
                         .input-field.col.s12.m10
                             input(type="number" placeholder="T.ex. 41" value="0")#volunteers-needed.validate
@@ -37,13 +37,13 @@ block content
                             label(for="help_tasks") Hjälp som behövs
                     .row
                         .input-field.col.s12.m10
-                            textarea(type="text" placeholder="T.ex. Bränder härjar i stora delar av Dalarna" oninput="handleCrisisInfoMsgChange()")#textarea2.materialize-textarea
-                            label(for="textarea2") Kort information om kris för SMS
+                            textarea(required type="text" placeholder="T.ex. Bränder härjar i stora delar av Dalarna" oninput="handleCrisisInfoMsgChange()")#textarea2.materialize-textarea
+                            label(for="textarea2") * Kort information om kris för SMS
                     .row
                         .input-field.col.s12.m10
-                            select(multiple)
+                            select(multiple required)
                                 option(value="" disabled) Välj områden
-                            label Områden för massutskick
+                            label * Områden för massutskick
                     .row
                         .input-field.col.s12.m10
                             p
