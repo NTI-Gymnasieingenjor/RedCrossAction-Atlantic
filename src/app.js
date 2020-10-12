@@ -11,7 +11,7 @@ require('dotenv').config({path: __dirname + '/../.env'});
 const app = express();
 const port = 8080;
 
-const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READONLY, err => {
+const db = new sqlite3.Database("./database.db", sqlite3.OPEN_READWRITE, err => {
     if (err)
         console.error(err);
 });
@@ -59,7 +59,7 @@ app.post("/auth", (req, res) => {
     const password = req.body.password;
 
     if (username && password) {
-        db.get(`SELECT * FROM users
+        db.get(`SELECT * FROM jour
         WHERE username = ?
         AND password = ?`,
         [username, password],
@@ -97,12 +97,30 @@ app.post("/signup", (req, res) => {
 });
 
 
-app.get("/dashboard", (req, res) => {
+// Middleware for /dashboard routes.
+app.use("/dashboard", (req, res, next) => {
     if(res.locals.isLoggedIn){
-        res.render("pages/dashboard");
+        next()
     } else {
-        res.redirect("/");
+        res.redirect("/login")
     }
+});
+
+app.get("/dashboard", (req, res) => {
+    res.render("pages/dashboard");
+});
+
+app.get("/dashboard/:id", (req, res) => {
+    db.get(`SELECT * FROM emergencies WHERE id = ?`,[req.params.id], (err, row) => {
+        if (err) {
+            console.log(err);
+            res.status(418);
+        } else if (!row) {
+            console.log("Could not find emergency with id: " + req.params.id);
+        } else {
+            res.render("pages/emergency_dashboard", {data: {row: row}});
+        }
+    });
 });
 
 // Volunteer Signup
@@ -140,26 +158,52 @@ app.get("/volunteer/:id/no", (req, res) => {
 app.post("/api/emergency/add", (req, res) => {
     if(!res.locals.isLoggedIn) return res.send("Unauthorized");
     let id = md5(req.body.emergency_name+new Date);
-    emergencies[id] = {
-        name: req.body.emergency_name,
-        vol_accepted: 0,
-        vol_count: req.body.volunteer_count,
-        equipment: req.body.equipment_list,
-        assembly_point: req.body.assembly_point,
-        assembly_date: req.body.assembly_date,
-        assembly_time: req.body.assembly_time,
-        help_needed: req.body.help_needed,
-        sms_text: req.body.sms_text,
-        affected_areas: req.body.areas,
-        more_info: req.body.more_info ? req.body.more_info : ""
-    };
+    let name = req.body.emergency_name;
+    let vol_count = req.body.volunteer_count;
+    let equipment = req.body.equipment_list;
+    let assembly_point = req.body.assembly_point;
+    let assembly_date = req.body.assembly_date;
+    let assembly_time = req.body.assembly_time;
+    let help_needed = req.body.help_needed;
+    let sms_text = req.body.sms_text;
+    let affected_areas = req.body.areas;
+    let more_info = req.body.more_info ? req.body.more_info : "";
+    db.run(`INSERT INTO emergencies (id,name,volunteers_needed,equipment,assembly,info,affected_areas) VALUES (?,?,?,?,?,?,?)`, [
+            id, 
+            name, 
+            vol_count, 
+            equipment, 
+            JSON.stringify({
+                point: assembly_point,
+                date: assembly_date,
+                time: assembly_time
+            }),
+            JSON.stringify({
+                help_needed: help_needed,
+                sms_text: sms_text,
+                more_info: more_info
+            }),
+            JSON.stringify(affected_areas)
+        ]
+    );
     res.json({emergency_id: id});
 });
 
 app.get('/api/emergency/:id', (req, res) => {
-    if(!res.locals.isLoggedIn) return res.send("Unauthorized");
-    emergencies[req.params.id].vol_accepted = usersAnsweredYes.length;
-    res.json(emergencies[req.params.id]);
+    //if(!res.locals.isLoggedIn) return res.send("Unauthorized");
+    db.get(`SELECT * FROM emergencies WHERE id = ?`, [req.params.id], (err, row) => {
+        if (err) {
+            console.log(err);
+            res.status(418);
+        } else if (!row) {
+            console.log("Could not find emergency with id: " + req.params.id);
+        } else {
+            row["assembly"] = JSON.parse(row["assembly"])
+            row["info"] = JSON.parse(row["info"])
+            row["affected_areas"] = JSON.parse(row["affected_areas"])
+            res.json(row);
+        }
+    });
 });
 
 
