@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const md5 = require('md5');
 const fetch = require('node-fetch');
 
-require('dotenv').config({path: __dirname + '/../.env'});
+require('dotenv').config({path: __dirname + '/.env'});
 
 const app = express();
 const port = 8080;
@@ -227,8 +227,8 @@ app.post("/api/send-sms", (req, res) => {
         }
     });
 
-    const username = process.env["API_USERNAME"]
-    const password = process.env["API_PASSWORD"]
+    const username = process.env["46ELKS_API_USERNAME"]
+    const password = process.env["46ELKS_API_PASSWORD"]
 
     let sentSMS = []
     // Making sendMessages into promise to be able to call function
