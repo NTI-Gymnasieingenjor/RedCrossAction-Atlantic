@@ -211,7 +211,7 @@ function handleCrisisMailing(e){
         if(listOfMessages.length){
             let msg = listOfMessages.shift();
             let now = new Date();
-            let timestamp = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
+            let timestamp = `${now.getDate()}/${now.getMonth()}-${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}`;
             $("#info-tip-list").prepend('<div class="card-panel teal info-msg"><span class="time-stamp grey-text text-lighten-2">' + timestamp + '</span><span class="white-text">' + msg + '</span></div>');
         } else {
             clearInterval(messageInterval);
