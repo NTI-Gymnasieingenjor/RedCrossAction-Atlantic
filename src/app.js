@@ -45,6 +45,10 @@ app.get("/", (req, res) => {
     res.render("pages/home");
 });
 
+app.get("/moreinfo", (req, res) => {
+    res.render("pages/more_info");
+});
+
 app.get("/login", (req, res) => {
     res.render("pages/login");
 });
@@ -80,6 +84,11 @@ app.post("/auth", (req, res) => {
 });
 
 
+// Volunteer Signup
+app.get("/signup", (req, res) => {
+    res.render("pages/signup");
+});
+
 // Handles volunteer registration
 let registeredVolunteers = [];
 app.post("/signup", (req, res) => {
@@ -99,11 +108,11 @@ app.post("/signup", (req, res) => {
 
 // Middleware for /dashboard routes.
 app.use("/dashboard", (req, res, next) => {
-    if(res.locals.isLoggedIn){
-        next()
-    } else {
-        res.redirect("/login")
-    }
+    //if(res.locals.isLoggedIn){
+    next()
+    //} else {
+    //    res.redirect("/login")
+    //}
 });
 
 app.get("/dashboard", (req, res) => {
@@ -121,15 +130,6 @@ app.get("/dashboard/:id", (req, res) => {
             res.render("pages/emergency_dashboard", {data: {row: row}});
         }
     });
-});
-
-// Volunteer Signup
-app.get("/signup", (req, res) => {
-    res.render("pages/signup");
-});
-
-app.get("/moreinfo", (req, res) => {
-    res.render("pages/more_info");
 });
 
 // Temp array to keep ids who opened link.
@@ -156,7 +156,7 @@ app.get("/volunteer/:id/no", (req, res) => {
 });
 
 app.post("/api/emergency/add", (req, res) => {
-    if(!res.locals.isLoggedIn) return res.send("Unauthorized");
+    //if(!res.locals.isLoggedIn) return res.send("Unauthorized");
     let id = md5(req.body.emergency_name+new Date);
     let name = req.body.emergency_name;
     let vol_count = req.body.volunteer_count;
@@ -186,6 +186,23 @@ app.post("/api/emergency/add", (req, res) => {
             JSON.stringify(affected_areas)
         ]
     );
+    let query = "SELECT * FROM volunteer WHERE active=1 AND (JSON_CONTAINS(county, ?,'$')";
+    if(affected_areas.length > 1){
+        affected_areas.forEach((area, i) => {
+            if(i === 0) return;
+            query+=" OR JSON_CONTAINS(county, ?, '$')";
+        });
+    }
+    query+=")";
+    db.get(query, affected_areas, (err, row) => {
+        if(err){
+            console.log(err);
+        } else if(!row){
+            console.log("Could not find any cool kids");
+        } else {
+            console.log(row);
+        }
+    });
     res.json({emergency_id: id});
 });
 
@@ -203,6 +220,13 @@ app.get('/api/emergency/:id', (req, res) => {
             row["affected_areas"] = JSON.parse(row["affected_areas"])
             res.json(row);
         }
+    });
+});
+
+app.get('/api/emergency/:id/volunteers', (req, res) => {
+    res.json({
+        yes: usersAnsweredYes.length,
+        no: userAsnweredNo.length
     });
 });
 
