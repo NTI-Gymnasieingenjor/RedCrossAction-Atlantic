@@ -102,20 +102,24 @@ function sendSmsRequest(){
     let crisisMsg = $("#textarea2").val();
     let areas = $("select").val();
 
+    let body = JSON.stringify({
+        emergency_name: $("#notification-name").val(),
+        volunteer_count: $("#volunteers-needed").val(),
+        equipment_list: $("#clothing-gear-needed").val(),
+        assembly_point: $("#samlingsplats").val(),
+        assembly_date: $("#datum").val(),
+        assembly_time: $("#tidpunkt").val(),
+        help_needed: $("#help_tasks").val(),
+        sms_text: $("#textarea2").val(),
+        areas: $("select").val(),
+        more_info: $("#more-info-field").val()
+    });
+
+    console.log(body);
+    
     fetch("/api/emergency/add", {
         method: 'POST',
-        body: JSON.stringify({
-            emergency_name: $("#notification-name").val(),
-            volunteer_count: $("#volunteers-needed").val(),
-            equipment_list: $("#clothing-gear-needed").val(),
-            assembly_point: $("#samlingsplats").val(),
-            assembly_date: $("#datum").val(),
-            assembly_time: $("tidpunkt").val(),
-            help_needed: $("#help_Tasks").val(),
-            sms_text: $("#textarea2").val(),
-            areas: $("select").val(),
-            more_info: $("#more-info-field").val()
-        }),
+        body: body,
         headers: {
             'Content-Type': 'application/json'
         }

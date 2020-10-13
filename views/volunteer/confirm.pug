@@ -1,54 +1,74 @@
 extends layout.pug
 block content
     #index-banner.section.no-pad-bot
-        h4.center Hej #{data.userid}
-        p.center Bränder härjar just nu i stora delar av Dalarna.
+        h4.center Hej #{data.name}
+        p#sms-text.center
         p.center
             a(href="/moreinfo" target="_blank") Läs mer här
 
+    .container
+        table
+            thead
+                tr
+                    th Information
+            tbody
+                tr
+                    td.info-with-icon
+                        i.material-icons accessibility
+                        span Kläder/utrustning att ta med:
+                    td#equipment
+                tr
+                    td.info-with-icon
+                        i.material-icons group
+                        span Volontärer:
+                    td
+                        span#volunteers_yes
+                        span /
+                        span#volunteers_needed
+                tr
+                    td.info-with-icon
+                        i.material-icons location_on
+                        span Samlingsplats:
+                    td#assembly_point
+                tr
+                    td.info-with-icon
+                        i.material-icons access_time
+                        span Tidpunkt:
+                    td 
+                        span#assembly_time
+                        span  
+                        span#assembly_date
+        table
+            thead
+                tr
+                    th Hjälp som behövs
+            tbody#help_needed
+                
+        h4.center Kan du delta som volontär?
+        br
         .container
-            table
-                thead
-                    tr
-                        th Information
-                tbody
-                    tr
-                        td.info-with-icon
-                            i.material-icons accessibility
-                            span Kläder/utrustning att ta med:
-                        td Regnkläder och handskar
-                    tr
-                        td.info-with-icon
-                            i.material-icons group
-                            span Volontärer:
-                        td 99/100
-                    tr
-                        td.info-with-icon
-                            i.material-icons location_on
-                            span Samlingsplats:
-                        td Mora, Morastrand
-                    tr
-                        td.info-with-icon
-                            i.material-icons access_time
-                            span Tidpunkt:
-                        td 15:00, 26 oktober
-            table
-                thead
-                    tr
-                        th Hjälp som behövs
-                tbody
-                    tr
-                        td Städning
-                    tr
-                        td Bädda sängar
-                    tr
-                        td Dela ut mat
-            h4.center Kan du delta som volontär?
-            br
-            .container
-                .row.center
-                    .col.s1.xl2
-                    a(href=`./${data.userid}/yes`)#yes-brn.col.s4.xl3.btn.waves-effect.waves-light.green Ja
-                    .col.s1.xl2
-                    a(href=`./${data.userid}/no`)#no-brn.col.s4.xl3.btn.waves-effect.waves-light.red Nej
-                    .col.s1.xl2
+            .row.center
+                .col.s1.xl2
+                a(href=`./${data.token}/yes`)#yes-brn.col.s4.xl3.btn.waves-effect.waves-light.green Ja
+                .col.s1.xl2
+                a(href=`./${data.token}/no`)#no-brn.col.s4.xl3.btn.waves-effect.waves-light.red Nej
+                .col.s1.xl2
+
+
+    script.
+        fetch(window.location.origin + "/api/emergency/" + "#{data.emergency_id}")
+        .then(res => res.json())
+        .then(data => {
+            $("#sms-text").text(data.info.sms_text)
+            $("#equipment").text(data.equipment)
+            $("#volunteers_yes").text("0")
+            $("#volunteers_needed").text(data.volunteers_needed)
+            $("#assembly_point").text(data.assembly.point)
+            $("#assembly_time").text(data.assembly.time)
+            $("#assembly_date").text(data.assembly["date"])
+
+            let help_needed_list = data.info.help_needed.split(",")
+            help_needed_list.forEach(task => {
+                $("#help_needed").append("<tr><td>" + task + "</td></tr>") 
+            });
+        });
