@@ -1,19 +1,23 @@
 const bodyParser = require('body-parser');
 const express = require("express");
 const session = require('express-session');
-const sqlite3 = require("sqlite3");
 const helmet = require('helmet');
 const md5 = require('md5');
 const fetch = require('node-fetch');
+const mariadb = require("mariadb");
 
-require('dotenv').config({path: __dirname + '/.env'});
+
+require('dotenv').config({path: __dirname + '/../.env'});
 
 const app = express();
 const port = 8080;
 
-const db = new sqlite3.Database("./database.db", sqlite3.OPEN_READWRITE, err => {
-    if (err)
-        console.error(err);
+const pool = mariadb.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    connectionLimit: 5
 });
 
 app.set("view engine", "pug");
