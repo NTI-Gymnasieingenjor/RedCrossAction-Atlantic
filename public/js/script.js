@@ -96,21 +96,12 @@ function handleCrisisInfoMsgChange() {
     else
         $("#sms-draft").html("");
 }
+
 let currenetEmergency = "";
 function sendSmsRequest(){
     let crisisMsg = $("#textarea2").val();
     let areas = $("select").val();
 
-    let body = {crisisMsg: crisisMsg, areas: areas}
-    fetch("/api/send-sms", {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-    .then(res => res.json())
-    .then(data => console.log(data));
     fetch("/api/emergency/add", {
         method: 'POST',
         body: JSON.stringify({
