@@ -80,33 +80,37 @@ router.post("/emergency/add", (req, res) => {
                 more_info: more_info
             }),
             JSON.stringify(affected_areas)
-        ])
-        .then((_) => conn.end())
-        .catch(err => {
+         ])
+         .then((_) => conn.end())
+         .catch(err => {
             console.log(err);
             conn.end()
             res.json({err: err});
-        });
-    });
+         });
+   });
 
-    // Building our query dynamically.
-    let query = "SELECT * FROM volunteer WHERE active=1 AND (";
-    query += affected_areas.map(area => "JSON_CONTAINS(county, ?)").join(" OR ");
-    query+=")";
-
-    req.db.getConnection()
-    .then(conn => {
-        conn.query(query, affected_areas.map(area => '"' + area + '"')) // Add quotations to be able to use JSON_CONTAINS
-        .then(rows => {
+   // Building our query dynamically.
+   let query = "SELECT * FROM volunteer WHERE active=1 AND (";
+   query += affected_areas.map(_ => "JSON_CONTAINS(county, ?)").join(" OR ");
+   query+=")";
+   let sent_count = 0;
+   req.db.getConnection()
+   .then(conn => {
+       conn.query(query, affected_areas.map(area => '"' + area + '"')) // Add quotations to be able to use JSON_CONTAINS
+       .then(rows => {
+            sent_count = rows.length;
             rows.forEach(row => {
-                let token = generateToken(id, row.id, req.db)
-                sendSMS(row.phone, row.name, sms_text, token, req.db)
+               let token = generateToken(id, row.id, req.db)
+               sendSMS(row.phone, row.name, sms_text, token, req.db)
             });
-        })
-        .then((_) => conn.end())
-        .catch(err => {console.log(err); conn.end()});
-    });
-    res.json({emergency_id: id});
+       })
+       .then((_) => conn.end())
+       .catch(err => {console.log(err); conn.end()});
+   });
+   res.json({
+      emergency_id: id,
+      sms_count: sent_count
+   });
 });
 
 router.get('/emergency/:id', (req, res) => {
