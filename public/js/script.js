@@ -190,14 +190,16 @@ function displayGraph(emergencyId, crisisName, volunteersNeeded){
 }
 
 function displayVolunteerTipMessages() {
-    
+    const pad = (str) => {
+        return ("0"+str).slice(-2);
+    };
     // Simulates fake info/tip from volunteer.
     let listOfMessages = ["Ska jag ta med gummistövlar?", "Jag har en traktor, hjälper det om jag tar med den?", "Är det ok om mina två döttrar, en 16åring och en 13åring, följer med?", "Jag har inga arbetshandskar, finns det att låna?"];
     let messageInterval = window.setInterval(() => {
         if(listOfMessages.length){
             let msg = listOfMessages.shift();
             let now = new Date();
-            let timestamp = `${now.getDate()}/${now.getMonth()}-${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}`;
+            let timestamp = `${now.getDate()}/${now.getMonth()}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
             $("#info-tip-list").prepend('<div class="card-panel teal info-msg"><span class="time-stamp grey-text text-lighten-2">' + timestamp + '</span><span class="white-text">' + msg + '</span></div>');
         } else {
             clearInterval(messageInterval);
