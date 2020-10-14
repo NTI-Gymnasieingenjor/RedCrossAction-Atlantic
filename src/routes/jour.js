@@ -1,17 +1,20 @@
 const express = require("express");
 const router = express.Router();
 
+// This is currently not encrypting passwords for development/mockup purposes
+// Encryption will probably be some kind of slow implementation such as bcrypt.
 function hash(str) { return str; }
 
+// Login/logout pages
 router.get("/login", (req, res) => {
     res.render("pages/login");
 });
-
 router.get("/logout", (req, res) => {
     req.session.role="";
     res.redirect("/");
 });
 
+// Login post, password will be encrypted with the `hash` function
 router.post("/auth", (req, res) => {
     const username = req.body.username;
     const password = hash(req.body.password);
@@ -37,10 +40,12 @@ router.post("/auth", (req, res) => {
     }
 });
 
+// Dashboard for the jour memeber
 router.get("/dashboard", (req, res) => {
     res.render("pages/dashboard");
 });
 
+// Dashbard for a specific emergency
 router.get("/dashboard/:id", (req, res) => {
     req.db.getConnection()
         .then(conn => {

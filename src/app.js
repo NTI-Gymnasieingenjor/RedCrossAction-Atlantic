@@ -9,13 +9,18 @@ require('dotenv').config({path: __dirname + '/../.env'});
 const app = express();
 const port = 8080;
 
-
+// Enable pretty compiled HTML for dev environment
 if (app.get('env') === 'development') {
   app.locals.pretty = true;
 }
 
+// Enable PUG as template engine
 app.set("view engine", "pug");
+
+// Enable static resources
 app.use(express.static('public'));
+
+// Enable security settings
 app.use(helmet(
     {
         contentSecurityPolicy: false,
@@ -23,20 +28,25 @@ app.use(helmet(
     }
 ));
 
+// Eanble sessions
 app.use(session({
     resave: false,
     saveUninitialized: false,
     secret: "secret"
 }));
+
+// Add a body parser
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+// Middleware for checking if the user is logged in
 app.use(function(req, res, next) {
     let isLoggedIn = req.session.role == "jour";
     res.locals.isLoggedIn = isLoggedIn;
     next();
 });
 
+// Middleware for creating a db per request
 app.use(function(req, res, next) {
     req.db = mariadb.createPool({
         host: process.env.DB_HOST,
@@ -48,6 +58,7 @@ app.use(function(req, res, next) {
     next();
 })
 
+// Routes
 app.get("/", (req, res) => {
     res.render("pages/home");
 });
