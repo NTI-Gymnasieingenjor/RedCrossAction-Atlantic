@@ -133,10 +133,15 @@ router.get('/emergency/:id', (req, res) => {
 });
 
 router.get('/emergency/:id/volunteers', (req, res) => {
-    res.json({
-        yes: usersAnsweredYes.length,
-        no: userAsnweredNo.length
-    });
+   req.db.getConnection().then(conn => {
+      conn.query("SELECT status FROM invites WHERE status != 0 AND emergency_id = ?",[req.params.id]).then(rows => {
+         console.log(rows);
+         res.json({
+            yes: rows.filter(el => el.status == 2).length,
+            no: rows.filter(el => el.status == 1).length
+         });
+      }).then(_ => conn.end()).catch(_ => {console.log(_);res.json({err:"Invalid emergency"});});
+   });
 });
 
 module.exports = router;
