@@ -60,7 +60,8 @@ app.use(function(req, res, next) {
 
 // Routes
 app.get("/", (req, res) => {
-    res.render("pages/home");
+    //res.render("pages/home");
+    res.render("pages/signup");
 });
 app.use('/api', require("./routes/api"));
 app.use('/volunteer', require("./routes/volunteer"));
