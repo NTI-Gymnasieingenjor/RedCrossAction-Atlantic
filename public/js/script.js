@@ -190,7 +190,6 @@ function displayGraph(emergencyId, crisisName, volunteersNeeded){
 }
 
 function displayVolunteerTipMessages() {
-    
     // Simulates fake info/tip from volunteer.
     let listOfMessages = ["Ska jag ta med gummistövlar?", "Jag har en traktor, hjälper det om jag tar med den?", "Är det ok om mina två döttrar, en 16åring och en 13åring, följer med?", "Jag har inga arbetshandskar, finns det att låna?"];
     let messageInterval = window.setInterval(() => {
@@ -208,6 +207,18 @@ function displayVolunteerTipMessages() {
 
 function handleCrisisMailing(e){
     e.preventDefault();
+
+    let listOfSelectedOptions = [];
+    $("select option").each(function() {
+        if($(this).is(':selected')){
+            listOfSelectedOptions.push($(this))
+        }
+    });
+
+    if(listOfSelectedOptions.length === 0){
+        $("#error-prompt").text("Du måste välja minst ett område");
+        return false;
+    }
 
     sendEmergencyRequest();
 
