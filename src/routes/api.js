@@ -25,7 +25,7 @@ function generateToken(emergencyId, volunteerId, db){
     return token;
 }
 
-function sendSMS(phoneNumber, name, smsText, token) {
+function sendSMS(phoneNumber, name, smsText, token, db) {
     const username = process.env["46ELKS_API_USERNAME"]
     const password = process.env["46ELKS_API_PASSWORD"]
 
@@ -33,7 +33,7 @@ function sendSMS(phoneNumber, name, smsText, token) {
     let message = "Hej " + name + "! " + smsText + ". Kan du delta som volontär? Klicka här: https://rodakorset.se/volunteer/" + token
     const key = new Buffer(username + ':' + password).toString('base64')
     fetch("https://api.46elks.com/a1/sms", {
-        body: "dryrun=yes&from=RK&to=" + phoneNumber + "&message=" + message,
+        body: "dryrun=no&from=RK&to=" + phoneNumber + "&message=" + message,
         headers: {
             "Authorization": 'Basic ' + key,
             "Content-Type": "application/x-www-form-urlencoded"
@@ -43,7 +43,7 @@ function sendSMS(phoneNumber, name, smsText, token) {
     .then(result => result.json())
     .then(data => {
         console.log(data);
-        req.db.getConnection()
+        db.getConnection()
         .then(conn => conn.query(`UPDATE invites SET sent = 1 WHERE token = ?`, [token]).then((_) => conn.end()).catch(err => conn.end()))
     });
 }
@@ -61,8 +61,6 @@ router.post("/emergency/add", (req, res) => {
     let sms_text = req.body.sms_text;
     let affected_areas = req.body.areas;
     let more_info = req.body.more_info ? req.body.more_info : "";
-
-    console.log(help_needed);
 
     req.db.getConnection()
     .then(conn => {
@@ -102,7 +100,7 @@ router.post("/emergency/add", (req, res) => {
         .then(rows => {
             rows.forEach(row => {
                 let token = generateToken(id, row.id, req.db)
-                sendSMS(row.phone, row.name, sms_text, token)
+                sendSMS(row.phone, row.name, sms_text, token, req.db)
             });
         })
         .then((_) => conn.end())
