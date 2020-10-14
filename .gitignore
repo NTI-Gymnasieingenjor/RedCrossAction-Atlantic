@@ -4,3 +4,4 @@ dist/
 .env
 database.db
 .vscode
+tests/geckodriver.log
