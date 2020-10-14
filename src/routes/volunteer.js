@@ -15,7 +15,7 @@ router.post("/signup", (req, res) => {
     const firstName = req.body.firstname;
     const phoneNumber = req.body.phonenumber;
     const area = req.body.area;
-   
+
     console.log(area);
 
     req.db.getConnection()

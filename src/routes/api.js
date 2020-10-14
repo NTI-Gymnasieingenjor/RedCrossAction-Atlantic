@@ -44,7 +44,8 @@ function sendSMS(phoneNumber, name, smsText, token, db) {
     .then(data => {
         console.log(data);
         db.getConnection()
-        .then(conn => conn.query(`UPDATE invites SET sent = 1 WHERE token = ?`, [token]).then((_) => conn.end()).catch(err => conn.end()))
+        .then(conn => conn.query(`UPDATE invites SET sent = 1 WHERE token = ?`, [token])
+          .then((_) => conn.end()).catch(err => conn.end()))
     });
 }
 
@@ -143,7 +144,11 @@ router.get('/emergency/:id/volunteers', (req, res) => {
             no: rows.filter(el => el.status == 1).length,
             sent: rows.length
          });
-      }).then(_ => conn.end()).catch(_ => {console.log(_);res.json({err:"Invalid emergency"});});
+      }).then(_ => conn.end()).catch(_ => {
+         console.log(_);
+         res.json({err:"Invalid emergency"});
+         conn.end();
+      }).catch(_ => conn.end());
    });
 });
 
