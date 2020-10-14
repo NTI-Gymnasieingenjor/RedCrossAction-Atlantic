@@ -7,4 +7,3 @@ $(document).ready(() => {
     $('.sidenav').sidenav();
     handleCrisisInfoMsgChange();
 });
-
