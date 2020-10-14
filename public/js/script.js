@@ -172,10 +172,11 @@ function displayGraph(emergencyId, crisisName, volunteersNeeded){
         }
     });
 
+    let yes = 0;
     let tid = window.setInterval(() => {
         fetch("/api/emergency/"+emergencyId).then(res => res.json()).then(data => {
-            let yes = 5;
             let count = data.volunteers_needed;
+            yes+=1;
             chart.data.datasets[0].data[0] = yes;
             chart.data.datasets[0].data[2] = count-yes;
             chart.update();
