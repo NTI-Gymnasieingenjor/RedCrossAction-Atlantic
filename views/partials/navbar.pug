@@ -8,20 +8,20 @@ nav.navbar
             ul.right.hide-on-med-and-down
                 if isLoggedIn
                     li
-                        a(href="/dashboard").black-text Dashboard
+                        a(href="/jour/dashboard").black-text Dashboard
                     li
-                        a(href="/logout").btn Logout
+                        a(href="/jour/logout").btn Logout
                 else
                     li
-                        a(href="/signup").black-text Registera som volontär
+                        a(href="/volunteer/signup").black-text Registera som volontär
                     li
-                        a(href="/login").btn Login
+                        a(href="/jour/login").btn Login
 ul#mobile-demo.sidenav
     if isLoggedIn
         li
-            a(href="/dashboard") Dashboard
+            a(href="/jour/dashboard") Dashboard
         li
-            a(href="/logout").btn Logout
+            a(href="/jour/logout").btn Logout
     else
         li
-            a(href="/login").btn Login
+            a(href="/jour/login").btn Login

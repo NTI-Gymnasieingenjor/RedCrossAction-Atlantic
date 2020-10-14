@@ -1,0 +1,13 @@
+extends ../layout.pug
+block content
+    h2.red-text Dashboard - #{data.row.name}
+    .row
+        #kris-data.col.s12.l6
+        .col.s12.l6
+            .card-panel.white
+                h5 Skickat från volontärer
+                #info-tip-list
+
+    script.
+        displayGraph("#{data.row.id}", "#{data.row.name}", #{data.row.volunteers_needed});
+        displayVolunteerTipMessages();
