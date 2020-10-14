@@ -97,8 +97,7 @@ function handleCrisisInfoMsgChange() {
         $("#sms-draft").html("");
 }
 
-let currentEmergency = "";
-function sendSmsRequest(){
+function sendEmergencyRequest(){
     let crisisMsg = $("#textarea2").val();
     let areas = $("select").val();
 
@@ -121,55 +120,59 @@ function sendSmsRequest(){
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(res => res.json()).then(data => { console.log(data); currentEmergency = data.emergency_id;});
+    }).then(res => res.json()).then(data => { window.location.replace("/jour/dashboard/"+data.emergency_id) });
 }
 
 function displayGraph(emergencyId, crisisName, volunteersNeeded){
     $("#kris-data").append('<div class="card-panel white"><h6>' + crisisName + '</h6></div>')
     $("#kris-data > .card-panel").append("<canvas id=\"myChart\"></canvas>");
-    
-    let ctx = document.getElementById('myChart').getContext('2d');
-    let chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Ja', 'Nej', 'Obesvarat'],
-            datasets: [{
-                label: "Volontär svar",
-                backgroundColor: [
-                    "#4caf50",
-                    "#f44336",
-                    "#bdbdbd"
-                ],
-                data: [0, 0, volunteersNeeded]
-            }]
-        },
-
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: volunteersNeeded
-                    }
+   
+    let ctx;
+    let chart;
+    fetch("/api/emergency/" + emergencyId + "/volunteers").then(res => res.json()).then(data => {
+        ctx = document.getElementById('myChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Ja', 'Nej', 'Obesvarat'],
+                datasets: [{
+                    label: "Volontär svar",
+                    backgroundColor: [
+                        "#4caf50",
+                        "#f44336",
+                        "#bdbdbd"
+                    ],
+                    data: [data.yes, data.no, data.sent]
                 }]
             },
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: 'rgb(0,0,0)',
-                    fontSize: 16,
-                    generateLabels: function(chart) {
-                        labels = Chart.defaults.global.legend.labels.generateLabels(chart);
-                        for (var key in labels) {
-                            labels[key].text = "Svar från volontärer.";
-                            labels[key].fillStyle = "rgb(255, 255, 255)";
-                            labels[key].strokeStyle = "rgb(255, 255, 255)";
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            suggestedMin: 0,
+                            suggestedMax: data.sent
                         }
-                        return labels;
+                    }]
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                        fontColor: 'rgb(0,0,0)',
+                        fontSize: 16,
+                        generateLabels: function(chart) {
+                            labels = Chart.defaults.global.legend.labels.generateLabels(chart);
+                            for (var key in labels) {
+                                labels[key].text = "Svar från volontärer.";
+                                labels[key].fillStyle = "rgb(255, 255, 255)";
+                                labels[key].strokeStyle = "rgb(255, 255, 255)";
+                            }
+                            return labels;
+                        }
                     }
-                }
-            },
-        }
+                },
+            }
+        });
     });
 
     let yes = 0;
@@ -206,7 +209,7 @@ function displayVolunteerTipMessages() {
 function handleCrisisMailing(e){
     e.preventDefault();
 
-    sendSmsRequest();
+    sendEmergencyRequest();
 
     clearAllFields();
     handleCrisisInfoMsgChange();
