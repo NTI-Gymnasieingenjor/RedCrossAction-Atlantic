@@ -14,9 +14,9 @@ function getRandomString(length) {
    return result;
 }
 
-function generateToken(emergencyId, volunteerId){
+function generateToken(emergencyId, volunteerId, db){
     let token = md5(emergencyId + volunteerId + getRandomString(32));
-    req.db.getConnection()
+    db.getConnection()
     .then(conn => {
         conn.query(`INSERT INTO invites (token, emergency_id, volunteer_id) VALUES (?,?,?)`, [token, emergencyId, volunteerId])
         .then((_) => conn.end())
@@ -101,7 +101,7 @@ router.post("/emergency/add", (req, res) => {
         conn.query(query, affected_areas.map(area => '"' + area + '"')) // Add quotations to be able to use JSON_CONTAINS
         .then(rows => {
             rows.forEach(row => {
-                let token = generateToken(id, row.id)
+                let token = generateToken(id, row.id, req.db)
                 sendSMS(row.phone, row.name, sms_text, token)
             });
         })

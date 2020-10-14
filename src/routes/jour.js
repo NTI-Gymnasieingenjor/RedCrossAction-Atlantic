@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// Middleware for /dashboard routes.
+
 router.get("/login", (req, res) => {
     res.render("pages/login");
 });
@@ -21,7 +21,7 @@ router.post("/auth", (req, res) => {
                 .then(rows => {
                     if(rows.length){
                         req.session.role = "jour";
-                        res.redirect("/dashboard");
+                        res.redirect("/jour/dashboard");
                     } else {
                         res.render("pages/login", {data: {error_msg: "Wrong username or password."}})
                     }
@@ -48,13 +48,13 @@ router.get("/dashboard/:id", (req, res) => {
                     res.render("pages/emergency_dashboard",{data: {row: rows[0]}});
                 } else {
                     console.log("Could not find any emergency with id: " + req.params.id);
-                    res.redirect("/dashboard");
+                    res.redirect("/jour/dashboard");
                 }
             }).then((_) => conn.end())
             .catch(err => {
                 console.log(err);
                 conn.end();
-                res.redirect("/dashboard");
+                res.redirect("/jour/dashboard");
             });
         })
 });

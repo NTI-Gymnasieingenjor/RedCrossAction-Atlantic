@@ -7,7 +7,7 @@ block content
                 h4 Logga in
                 if typeof data !== "undefined"
                     p.red-text= data.error_msg
-                form(method="POST" action="/auth")
+                form(method="POST" action="/jour/auth")
                     .row
                         .input-field.col.s12.m10
                             input(required name="username" type="text" placeholder="Användarnamn")#username.validate

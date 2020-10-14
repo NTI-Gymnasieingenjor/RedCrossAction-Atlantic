@@ -38,7 +38,7 @@ router.get("/:token", (req, res) => {
         .then(() => conn.end())
         .catch(err => {
             console.log(err);
-            res.redirect("/signup")
+            res.redirect("/volunteer/signup")
             conn.end();
         })
     })

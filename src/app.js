@@ -10,6 +10,10 @@ const app = express();
 const port = 8080;
 
 
+if (app.get('env') === 'development') {
+  app.locals.pretty = true;
+}
+
 app.set("view engine", "pug");
 app.use(express.static('public'));
 app.use(helmet(

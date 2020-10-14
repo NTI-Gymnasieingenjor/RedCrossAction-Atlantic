@@ -4,7 +4,7 @@ block content
         h4.center Hej #{data.name}
         p#sms-text.center
         p.center
-            a(href="/moreinfo" target="_blank") Läs mer här
+            a(href="/volunteer/moreinfo" target="_blank") Läs mer här
 
     .container
         table
@@ -49,9 +49,9 @@ block content
         .container
             .row.center
                 .col.s1.xl2
-                a(href=`./${data.token}/yes`)#yes-brn.col.s4.xl3.btn.waves-effect.waves-light.green Ja
+                a(href=`/volunteer/${data.token}/yes`)#yes-brn.col.s4.xl3.btn.waves-effect.waves-light.green Ja
                 .col.s1.xl2
-                a(href=`./${data.token}/no`)#no-brn.col.s4.xl3.btn.waves-effect.waves-light.red Nej
+                a(href=`/volunteer/${data.token}/no`)#no-brn.col.s4.xl3.btn.waves-effect.waves-light.red Nej
                 .col.s1.xl2
 
 
