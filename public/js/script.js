@@ -142,7 +142,7 @@ function displayGraph(emergencyId, crisisName, volunteersNeeded){
                         "#f44336",
                         "#bdbdbd"
                     ],
-                    data: [data.yes, data.no, data.sent]
+                    data: [data.yes, data.no, data.sent - data.yes - data.no]
                 }]
             },
 
