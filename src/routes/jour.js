@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+function hash(str) { return str; }
+
 router.get("/login", (req, res) => {
     res.render("pages/login");
 });
@@ -12,7 +14,7 @@ router.get("/logout", (req, res) => {
 
 router.post("/auth", (req, res) => {
     const username = req.body.username;
-    const password = req.body.password;
+    const password = hash(req.body.password);
 
     if (username && password) {
         req.db.getConnection()
