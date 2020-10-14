@@ -15,9 +15,22 @@ router.post("/signup", (req, res) => {
     const firstName = req.body.firstname;
     const phoneNumber = req.body.phonenumber;
     const area = req.body.area;
+   
+    console.log(area);
 
-
-    res.redirect("/");
+    req.db.getConnection()
+    .then(conn => {
+        conn.query(`INSERT INTO volunteer (name, phone, county, active) VALUES (?,?,?,?)`, [firstName, phoneNumber, JSON.stringify(area), 1])
+        .then(rows => {
+            res.redirect("/");
+            conn.end();
+        })
+        .catch(err => {
+            console.log(err);
+            res.render("pages/signup", {data: {error_msg: "Something went wrong."}});
+            conn.end();
+        })
+    });
 });
 
 router.get("/:token", (req, res) => {

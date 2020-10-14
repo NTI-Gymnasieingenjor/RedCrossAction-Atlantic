@@ -4,6 +4,8 @@ block content
     .row
         form(action="/volunteer/signup" method="POST").col.s12
             h2 Registera dig som volontär
+            if typeof data !== "undefined"
+                p.red-text= data.error_msg
             .row
                 .input-field.col.s12.m6
                     input(required placeholder="T.ex. Kalle" type="text" name="firstname")#first_name.validate
