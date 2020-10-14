@@ -97,7 +97,7 @@ function handleCrisisInfoMsgChange() {
         $("#sms-draft").html("");
 }
 
-let currenetEmergency = "";
+let currentEmergency = "";
 function sendSmsRequest(){
     let crisisMsg = $("#textarea2").val();
     let areas = $("select").val();
@@ -115,15 +115,13 @@ function sendSmsRequest(){
         more_info: $("#more-info-field").val()
     });
 
-    console.log(body);
-    
     fetch("/api/emergency/add", {
         method: 'POST',
         body: body,
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(res => res.json()).then(data => { console.log(data); currenetEmergency = data.emergency_id;});
+    }).then(res => res.json()).then(data => { console.log(data); currentEmergency = data.emergency_id;});
 }
 
 function displayGraph(emergencyId, crisisName, volunteersNeeded){
@@ -185,15 +183,8 @@ function displayGraph(emergencyId, crisisName, volunteersNeeded){
     }, 3000);
 }
 
-function handleCrisisMailing(e){
-    e.preventDefault();
-
-    sendSmsRequest();
-
-    clearAllFields();
-    handleCrisisInfoMsgChange();
-
-
+function displayVolunteerTipMessages() {
+    
     // Simulates fake info/tip from volunteer.
     let listOfMessages = ["Ska jag ta med gummistövlar?", "Jag har en traktor, hjälper det om jag tar med den?", "Är det ok om mina två döttrar, en 16åring och en 13åring, följer med?", "Jag har inga arbetshandskar, finns det att låna?"];
     let messageInterval = window.setInterval(() => {
@@ -206,6 +197,16 @@ function handleCrisisMailing(e){
             clearInterval(messageInterval);
         }
     }, 10000)
+}
+
+
+function handleCrisisMailing(e){
+    e.preventDefault();
+
+    sendSmsRequest();
+
+    clearAllFields();
+    handleCrisisInfoMsgChange();
 }
 
 function handleMoreInfoToggle(e) {
