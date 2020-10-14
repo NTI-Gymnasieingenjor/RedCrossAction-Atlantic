@@ -41,7 +41,8 @@ block content
                             label(for="textarea2") * Kort information om kris för SMS
                     .row
                         .input-field.col.s12.m10
-                            select(required multiple)
+                            p.red-text#error-prompt
+                            select(multiple)
                                 option(value="" disabled) Välj län
                             label * Län för massutskick
                     .row
@@ -59,7 +60,3 @@ block content
                                 i.material-icons.right send
         #kris-data.col.s12.l6
         #sms-draft.col.s12.l6
-        .col.s12.l6
-            .card-panel.white
-                h5 Skickat från volontärer
-                #info-tip-list

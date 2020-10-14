@@ -211,6 +211,18 @@ function displayVolunteerTipMessages() {
 function handleCrisisMailing(e){
     e.preventDefault();
 
+    let listOfSelectedOptions = [];
+    $("select option").each(function() {
+        if($(this).is(':selected')){
+            listOfSelectedOptions.push($(this))
+        }
+    });
+
+    if(listOfSelectedOptions.length === 0){
+        $("#error-prompt").text("Du måste välja minst ett område");
+        return false;
+    }
+
     sendEmergencyRequest();
 
     clearAllFields();
