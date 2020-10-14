@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+// Get more information about the emergency
+// TODO: implement
 router.get("/moreinfo", (req, res) => {
     res.render("pages/more_info");
 });
@@ -33,6 +35,7 @@ router.post("/signup", (req, res) => {
     });
 });
 
+// Retrieve invite and information about emergency
 router.get("/:token", (req, res) => {
     req.db.getConnection()
     .then(conn => {
@@ -57,6 +60,7 @@ router.get("/:token", (req, res) => {
     })
 });
 
+// Accept emergency invitation
 router.get("/:token/yes", (req, res) => {
     req.db.getConnection()
     .then(conn => {
@@ -67,6 +71,7 @@ router.get("/:token/yes", (req, res) => {
     })
 });
 
+// Decline emergency invitation
 router.get("/:token/no", (req, res) => {
     req.db.getConnection()
     .then(conn => {

@@ -4,16 +4,8 @@ const express = require("express");
 const router = express.Router();
 
 
-function getRandomString(length) {
-   var result           = '';
-   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-   var charactersLength = characters.length;
-   for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-   }
-   return result;
-}
 
+// Generate a invite token for volunteers
 function generateToken(emergencyId, volunteerId, db){
     let token = md5(emergencyId + volunteerId + getRandomString(32));
     db.getConnection()
@@ -25,6 +17,9 @@ function generateToken(emergencyId, volunteerId, db){
     return token;
 }
 
+// Use the 46elks API to send SMS to volunteers
+// username and password for the API can be stored in the
+// 46ELKS_API_USERNAME and 46ELKS_API_PASSWORD env variables
 function sendSMS(phoneNumber, name, smsText, token, db) {
     const username = process.env["46ELKS_API_USERNAME"]
     const password = process.env["46ELKS_API_PASSWORD"]
@@ -49,6 +44,7 @@ function sendSMS(phoneNumber, name, smsText, token, db) {
     });
 }
 
+// Add a new emergency and send out SMS for volunteers in the affected areas
 router.post("/emergency/add", (req, res) => {
     //if(!res.locals.isLoggedIn) return res.send("Unauthorized");
     let id = md5(req.body.emergency_name+new Date);
@@ -91,6 +87,7 @@ router.post("/emergency/add", (req, res) => {
    });
 
    // Building our query dynamically.
+   // This needs to be done to check the JSON in the database
    let query = "SELECT * FROM volunteer WHERE active=1 AND (";
    query += affected_areas.map(_ => "JSON_CONTAINS(county, ?)").join(" OR ");
    query+=")";
@@ -114,6 +111,7 @@ router.post("/emergency/add", (req, res) => {
    });
 });
 
+// Get status and information about a emergency by id
 router.get('/emergency/:id', (req, res) => {
     //if(!res.locals.isLoggedIn) return res.send("Unauthorized");
     req.db.getConnection()
@@ -135,6 +133,9 @@ router.get('/emergency/:id', (req, res) => {
     });
 });
 
+// Get information about the volunteers for emergency by id.
+// This will return how many volunteers have been invited, as well as
+// the amount of answers of yes and no.
 router.get('/emergency/:id/volunteers', (req, res) => {
    req.db.getConnection().then(conn => {
       conn.query("SELECT status FROM invites WHERE emergency_id = ?",[req.params.id]).then(rows => {
@@ -153,3 +154,16 @@ router.get('/emergency/:id/volunteers', (req, res) => {
 });
 
 module.exports = router;
+
+
+
+// Helper functions
+function getRandomString(length) {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
