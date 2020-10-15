@@ -3,7 +3,7 @@ extends ../layout.pug
 block content
     .row
         form(action="/volunteer/signup" method="POST").col.s12
-            h2 Registera dig som volontär
+            h2 Registrera dig som volontär
             if typeof data !== "undefined"
                 p.red-text= data.error_msg
             .row
