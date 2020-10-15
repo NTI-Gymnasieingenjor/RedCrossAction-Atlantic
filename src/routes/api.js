@@ -8,12 +8,7 @@ const router = express.Router();
 // Generate a invite token for volunteers
 function generateToken(emergencyId, volunteerId, db){
     let token = md5(emergencyId + volunteerId + getRandomString(32));
-    db.getConnection()
-    .then(conn => {
-        conn.query(`INSERT INTO invites (token, emergency_id, volunteer_id) VALUES (?,?,?)`, [token, emergencyId, volunteerId])
-        .then((_) => conn.end())
-        .catch(err => conn.end())
-    });
+    db.query("INSERT INTO invites (token, emergency_id, volunteer_id) VALUES (?,?,?)", [ token, emergencyId, volunteerId ]);
     return token;
 }
 
@@ -37,10 +32,7 @@ function sendSMS(phoneNumber, name, smsText, token, db) {
     })
     .then(result => result.json())
     .then(data => {
-        console.log(data);
-        db.getConnection()
-        .then(conn => conn.query(`UPDATE invites SET sent = 1 WHERE token = ?`, [token])
-          .then((_) => conn.end()).catch(err => conn.end()))
+        db.query("UPDATE invites SET sent = 1 WHERE token = ?", [ token ]);
     });
 }
 
@@ -58,10 +50,8 @@ router.post("/emergency/add", (req, res) => {
     let sms_text = req.body.sms_text;
     let affected_areas = req.body.areas;
     let more_info = req.body.more_info ? req.body.more_info : "";
-
-    req.db.getConnection()
-    .then(conn => {
-        conn.query(`INSERT INTO emergencies (id,name,volunteers_needed,equipment,assembly,info,affected_areas) VALUES (?,?,?,?,?,?,?)`, [
+    if(typeof affected_areas === "string") affected_areas = [ affected_areas ];
+    req.db.query("INSERT INTO emergencies (id, name, volunteers_needed, equipment, assembly, info, affected_areas) VALUES (?, ?, ?, ?, ?, ?, ?)",[
             id,
             name,
             vol_count,
@@ -77,34 +67,32 @@ router.post("/emergency/add", (req, res) => {
                 more_info: more_info
             }),
             JSON.stringify(affected_areas)
-         ])
-         .then((_) => conn.end())
-         .catch(err => {
+    ], (err, result, fields) => {
+        if (err) {
             console.log(err);
-            conn.end()
             res.json({err: err});
-         });
-   });
+        }
+    });
 
-   // Building our query dynamically.
-   // This needs to be done to check the JSON in the database
-   let query = "SELECT * FROM volunteer WHERE active=1 AND (";
-   query += affected_areas.map(_ => "JSON_CONTAINS(county, ?)").join(" OR ");
-   query+=")";
-   let sent_count = 0;
-   req.db.getConnection()
-   .then(conn => {
-       conn.query(query, affected_areas.map(area => '"' + area + '"')) // Add quotations to be able to use JSON_CONTAINS
-       .then(rows => {
-            sent_count = rows.length;
-            rows.forEach(row => {
+    // Building our query dynamically.
+    // This needs to be done to check the JSON in the database
+    let query = "SELECT * FROM volunteer WHERE active=1 AND (";
+    query += affected_areas.map(_ => "JSON_CONTAINS(county, ?)").join(" OR ");
+    query+=")";
+    let sent_count = 0;
+
+    req.db.query(query, affected_areas.map(area => '"' + area +'"'),
+    (err, result, fields) => {
+        if(err) console.log(err);
+        else {
+            sent_count = result.length;
+            result.forEach(row => {
                let token = generateToken(id, row.id, req.db)
                sendSMS(row.phone, row.name, sms_text, token, req.db)
             });
-       })
-       .then((_) => conn.end())
-       .catch(err => {console.log(err); conn.end()});
-   });
+        }
+    });
+
    res.json({
       emergency_id: id,
       sms_count: sent_count
@@ -114,22 +102,18 @@ router.post("/emergency/add", (req, res) => {
 // Get status and information about a emergency by id
 router.get('/emergency/:id', (req, res) => {
     //if(!res.locals.isLoggedIn) return res.send("Unauthorized");
-    req.db.getConnection()
-    .then(conn => {
-        conn.query(`SELECT * FROM emergencies WHERE id = ?`, [req.params.id])
-        .then(rows => {
-            let row = rows[0]
+    req.db.query("SELECT * FROM emergencies WHERE id = ?", [ req.params.id ],
+    (err, result, fields) => {
+        if(err) {
+            console.log(err);
+            res.json({err: "Something went wrong."});
+        } else {
+            let row = result[0];
             row["assembly"] = JSON.parse(row["assembly"])
             row["info"] = JSON.parse(row["info"])
             row["affected_areas"] = JSON.parse(row["affected_areas"])
             res.json(row);
-        })
-        .then((_) => conn.end())
-        .catch(err => {
-            console.log(err);
-            res.json({err: "Something went wrong."})
-            conn.end()
-        });
+        }
     });
 });
 
@@ -137,20 +121,19 @@ router.get('/emergency/:id', (req, res) => {
 // This will return how many volunteers have been invited, as well as
 // the amount of answers of yes and no.
 router.get('/emergency/:id/volunteers', (req, res) => {
-   req.db.getConnection().then(conn => {
-      conn.query("SELECT status FROM invites WHERE emergency_id = ?",[req.params.id]).then(rows => {
-         console.log(rows);
-         res.json({
-            yes: rows.filter(el => el.status == 2).length,
-            no: rows.filter(el => el.status == 1).length,
-            sent: rows.length
-         });
-      }).then(_ => conn.end()).catch(_ => {
-         console.log(_);
-         res.json({err:"Invalid emergency"});
-         conn.end();
-      }).catch(_ => conn.end());
-   });
+    req.db.query("SELECT status FROM invites WHERE emergency_id = ?", [ req.params.id ],
+    (err, result, fields) => {
+        if(err) {
+            console.log(err);
+            res.json({err:"Invalid emergency"});
+        } else {
+            res.json({
+                yes: result.filter(el => el.status == 2).length,
+                no: result.filter(el => el.status == 1).length,
+                sent: result.length
+            });
+        }
+    })
 });
 
 module.exports = router;
