@@ -25,7 +25,7 @@ function sendSMS(phoneNumber, name, smsText, token, db) {
     const password = process.env["46ELKS_API_PASSWORD"]
 
     let url = "https://api.46elks.com/a1/SMS"
-    let message = "Hej " + name + "! " + smsText + ". Kan du delta som volontär? Klicka här: https://rodakorset.se/volunteer/" + token
+    let message = "Hej " + name + "! " + smsText + ". Kan du delta som volontär? Klicka här: https://www.rodakorset.se/volunteer/" + token
     const key = new Buffer(username + ':' + password).toString('base64')
     fetch("https://api.46elks.com/a1/sms", {
         body: "dryrun=yes&from=RK&to=" + phoneNumber + "&message=" + message,
