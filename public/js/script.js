@@ -94,7 +94,7 @@ function handleCrisisInfoMsgChange() {
     $("#sms-draft").css("margin-top", marginTop);
 
     if(crisisInfoMsg.length)
-        $("#sms-draft").html('<div class="card-panel white"><h5>Utkast för SMS</h5><p>Hej Kalle! <span id="crisis-info-msg" class="red-text">'+crisisInfoMsg+'</span>. Kan du delta som volontär? Klicka här: https://www.rodakorset.se/volunteer/token</p></div>');
+        $("#sms-draft").html('<div class="card-panel white"><h5>Utkast för SMS</h5><p>Hej Kalle! <span id="crisis-info-msg" class="red-text">'+crisisInfoMsg+'</span>. Kan du delta som volontär? Klicka här: http://donran.se:8080/volunteer/1i2jo3123jufgh</p></div>');
     else
         $("#sms-draft").html("");
 }
