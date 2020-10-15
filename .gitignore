@@ -5,3 +5,4 @@ dist/
 database.db
 .vscode
 tests/geckodriver.log
+tests/__pycache__
