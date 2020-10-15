@@ -8,13 +8,13 @@ class TestApi(WebTestBase):
         api_route = "api/emergency/add"
 
         payload = {
-            "emergency_name": "Test Kris",
+            "emergency_name": "Testkris",
             "volunteer_count": 100,
             "equipment_list": "Regnkläder, Handskar",
             "assembly_point": "Mora, Morastrand",
             "assembly_date": "16/9/2020",
             "assembly_time": "15:00",
-            "help_needed": "Städning, Kaffe drickande",
+            "help_needed": "Städning, Kaffedrickande",
             "sms_text": "Det är kris",
             "areas": ["uppsala", "vasterbotten"],
             "more_info": ""
