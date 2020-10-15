@@ -14,7 +14,7 @@ class WebTestBase(unittest.TestCase):
         try:
             firefox_binary = check_output(["which", "firefox"]).decode().strip()
         except:
-            print("Could not find any firefox installed")
+            print("No firefox installation was found")
             sys.exit(1)
 
         # Set up firefox service and options
