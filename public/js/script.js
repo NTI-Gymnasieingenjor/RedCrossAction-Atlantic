@@ -90,7 +90,7 @@ function clearAllFields() {
 
 function handleCrisisInfoMsgChange() {
     let crisisInfoMsg = $("#textarea2").val();
-    let marginTop = $("#textarea2").offset().top - $("#sms-draft").offset().top;
+    let marginTop = $("#textarea2").offset().top - $(".container > .row").offset().top;
     $("#sms-draft").css("margin-top", marginTop);
 
     if(crisisInfoMsg.length)
