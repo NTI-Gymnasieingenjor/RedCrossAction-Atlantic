@@ -10,6 +10,6 @@ class TestHomepage(WebTestBase):
         driver.get(self.WEBSITE_URL)
 
         try:
-            header = driver.find_element(By.XPATH, "//*[contains(text(), 'Krishanteringssystem')]")
+            driver.find_element(By.XPATH, "//*[contains(text(), 'Krishanteringssystem')]")
         except NoSuchElementException:
             self.fail("Could not find element with text: 'Krishanteringssystem'")

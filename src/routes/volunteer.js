@@ -18,6 +18,7 @@ router.post("/signup", (req, res) => {
     const phoneNumber = req.body.phonenumber;
     let area = req.body.area;
 
+
     if(typeof area === "string") {
         area = [ area ];
     }
