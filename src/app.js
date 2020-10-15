@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require('express-session');
 const helmet = require('helmet');
-const mariadb = require("mariadb");
 const mysql = require("mysql");
 
 require('dotenv').config({path: __dirname + '/../.env'});
