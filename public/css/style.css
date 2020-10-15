@@ -65,6 +65,12 @@
 	line-break: anywhere;
 }
 
+@media screen and (max-width: 992px){
+    #sms-draft {
+        margin-top: 0px !important;
+    }
+}
+
 @keyframes loadSlide {
     from {
         opacity: 0;

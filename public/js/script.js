@@ -90,7 +90,9 @@ function clearAllFields() {
 
 function handleCrisisInfoMsgChange() {
     let crisisInfoMsg = $("#textarea2").val();
-    
+    let marginTop = $("#textarea2").offset().top - $("#sms-draft").offset().top;
+    $("#sms-draft").css("margin-top", marginTop);
+
     if(crisisInfoMsg.length)
         $("#sms-draft").html('<div class="card-panel white"><h5>Utkast för SMS</h5><p>Hej Kalle! <span id="crisis-info-msg" class="red-text">'+crisisInfoMsg+'</span>. Har du möjlighet att delta som volontär? Klicka här för mer information: https://www.rodakorset.se/volunteer</p></div>');
     else
