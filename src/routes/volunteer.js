@@ -18,13 +18,11 @@ router.post("/signup", (req, res) => {
     const phoneNumber = req.body.phonenumber;
     const area = req.body.area;
 
-    console.log(area);
-
     req.db.getConnection()
     .then(conn => {
         conn.query(`INSERT INTO volunteer (name, phone, county, active) VALUES (?,?,?,?)`, [firstName, phoneNumber, JSON.stringify(area), 1])
         .then(rows => {
-            res.redirect("/");
+            res.render("volunteer/signup_complete");
             conn.end();
         })
         .catch(err => {
