@@ -10,7 +10,7 @@ class TestApi(WebTestBase):
         payload = {
             "emergency_name": "Testkris",
             "volunteer_count": 100,
-            "equipment_list": "Regnkläder, Handskar",
+            "equipment_list": "Regnkläder och Handskar",
             "assembly_point": "Mora, Morastrand",
             "assembly_date": "16/9/2020",
             "assembly_time": "15:00",
