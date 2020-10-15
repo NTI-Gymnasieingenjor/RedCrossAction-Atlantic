@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const session = require('express-session');
 const helmet = require('helmet');
 const mariadb = require("mariadb");
+const mysql = require("mysql");
 
 require('dotenv').config({path: __dirname + '/../.env'});
 
@@ -11,7 +12,7 @@ const port = 8080;
 
 // Enable pretty compiled HTML for dev environment
 if (app.get('env') === 'development') {
-  app.locals.pretty = true;
+    app.locals.pretty = true;
 }
 
 // Enable PUG as template engine
@@ -46,15 +47,27 @@ app.use(function(req, res, next) {
     next();
 });
 
+const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+});
+
+connection.connect(err => {
+    if(err) console.error("Error connecting: " + err.stack);
+});
 // Middleware for creating a db per request
 app.use(function(req, res, next) {
-    req.db = mariadb.createPool({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        connectionLimit: 5
-    });
+    //req.db = mariadb.createPool({
+    //    host: process.env.DB_HOST,
+    //    user: process.env.DB_USER,
+    //    password: process.env.DB_PASSWORD,
+    //    database: process.env.DB_NAME,
+    //    connectionLimit: 5
+    //});
+    req.db = connection;
+
     next();
 })
 
@@ -71,3 +84,5 @@ app.use('/jour', require("./routes/jour"))
 app.listen(port, () => {
     return console.log(`server is listening on ${port}`);
 });
+
+//connection.destroy();
