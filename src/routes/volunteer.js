@@ -29,7 +29,7 @@ router.post("/signup", (req, res) => {
             console.log(err);
             res.render("pages/signup", {data: {error_msg: "Something went wrong."}});
         } else {
-            res.redirect("/");
+            res.render("volunteer/signup_complete");
         }
     })
 });
